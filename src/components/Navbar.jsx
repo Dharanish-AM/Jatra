@@ -29,7 +29,7 @@ export default function Navbar() {
             className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b ${scrolled ? 'glass border-border-light py-3 shadow-[0_4px_30px_rgba(0,0,0,0.1)]' : 'bg-transparent border-transparent py-5'
                 }`}
         >
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+            <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
                 <Link to="/" className="flex items-center gap-2 group">
                     <Map className="w-8 h-8 text-accent-orange flex-shrink-0 transition-transform duration-300 group-hover:rotate-[-10deg] group-hover:scale-110 drop-shadow-[0_0_8px_rgba(249,115,22,0.4)]" />
                     <span className="text-2xl font-extrabold tracking-tight text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-accent-orange group-hover:to-accent-orange-light transition-all duration-300">

@@ -3,7 +3,7 @@ import { Bus, Train, Clock, Star, Wifi, Zap, Coffee, ChevronRight, Check } from 
 import { useTrip } from '../context/TripContext';
 import toast from 'react-hot-toast';
 
-export default function RouteCard({ route, isRecommended, isAiPick }) {
+export default function RouteCard({ route, isRecommended, isAiPick, onCompare, isComparing, canCompare }) {
     const { actions, selectedRoutes } = useTrip();
 
     const isAdded = selectedRoutes.some(r => r.id === route.id);
@@ -96,12 +96,29 @@ export default function RouteCard({ route, isRecommended, isAiPick }) {
                 </div>
             </div>
 
-            <div className="mt-4 pt-3 border-t border-border/50 flex flex-wrap gap-2 text-xs text-text-muted">
-                {route.amenities.map(am => (
-                    <span key={am} className="flex items-center gap-1 bg-primary-bg px-2 py-1 rounded-md border border-border">
-                        {getAmenityIcon(am)} {am}
-                    </span>
-                ))}
+            <div className="mt-4 pt-3 border-t border-border/50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-xs text-text-muted">
+                <div className="flex flex-wrap gap-2">
+                    {route.amenities.map(am => (
+                        <span key={am} className="flex items-center gap-1 bg-primary-bg px-2 py-1 rounded-md border border-border">
+                            {getAmenityIcon(am)} {am}
+                        </span>
+                    ))}
+                </div>
+                {onCompare && (
+                    <button
+                        onClick={onCompare}
+                        disabled={!canCompare}
+                        className={`flex justify-center items-center gap-1.5 px-4 py-2 w-full sm:w-auto rounded-full border shadow-sm transition-all duration-300 ${isComparing
+                            ? 'bg-accent-orange border-accent-orange text-white'
+                            : 'bg-primary-bg/80 border-border-light text-text-muted hover:border-accent-orange/50 hover:text-white'
+                            } ${!canCompare && !isComparing ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
+                        <div className={`flex items-center justify-center w-4 h-4 rounded-full transition-all ${isComparing ? 'bg-white text-accent-orange' : 'bg-transparent border border-text-muted/50 text-current'}`}>
+                            {isComparing ? <svg className="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={4}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg> : <svg className="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>}
+                        </div>
+                        <span className="text-xs font-bold tracking-wide">{isComparing ? 'Added to Compare' : 'Compare'}</span>
+                    </button>
+                )}
             </div>
         </div>
     );

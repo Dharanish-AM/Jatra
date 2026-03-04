@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SearchForm from '../components/SearchForm';
-import { MapPin, ArrowRight, Sparkles } from 'lucide-react';
+import { MapPin, ArrowRight, Sparkles, Calendar } from 'lucide-react';
 import { useTrip } from '../context/TripContext';
 
 const popularRoutes = [
@@ -42,7 +42,7 @@ export default function Home() {
 
             <div className="relative flex-1 flex flex-col py-12 px-4 sm:px-6 lg:px-8 z-10">
 
-                <div className={`max-w-5xl mx-auto w-full flex-1 flex flex-col justify-center pb-20 mt-10 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+                <div className={`w-full mx-auto flex-1 flex flex-col justify-center pb-20 mt-10 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
                     <div className="text-center mb-16">
                         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-accent-orange/30 bg-accent-orange/10 text-accent-orange text-sm font-semibold mb-6 shadow-[0_0_15px_rgba(249,115,22,0.15)]">
                             <Sparkles className="w-4 h-4" /> The New Standard in Travel

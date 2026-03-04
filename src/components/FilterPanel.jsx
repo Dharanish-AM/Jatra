@@ -53,14 +53,19 @@ export default function FilterPanel({ filters, setFilters, onClose }) {
                     <h3 className="text-xs font-black text-text-muted mb-4 uppercase tracking-widest pl-1">Transport Type</h3>
                     <div className="space-y-3">
                         {['Bus', 'Train'].map(t => (
-                            <label key={t} className="flex items-center gap-3 cursor-pointer group bg-primary-bg/30 p-2 rounded-lg border border-transparent hover:border-border-light transition-all">
+                            <label key={t} className={`flex items-center gap-3 cursor-pointer group p-3 rounded-xl transition-all duration-300 border ${filters.types.includes(t) ? 'bg-accent-orange/10 border-accent-orange/30 shadow-[inset_0_0_15px_rgba(249,115,22,0.1)]' : 'bg-primary-bg/30 border-transparent hover:bg-primary-bg/60 hover:border-border-light'}`}>
+                                <div className={`w-5 h-5 rounded flex items-center justify-center transition-colors border ${filters.types.includes(t) ? 'bg-accent-orange border-accent-orange text-white' : 'bg-card-bg border-border-light text-transparent'}`}>
+                                    <svg viewBox="0 0 24 24" fill="none" className="w-3.5 h-3.5" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                </div>
                                 <input
                                     type="checkbox"
                                     checked={filters.types.includes(t)}
                                     onChange={() => handleTypeChange(t)}
-                                    className="rounded border-border-light bg-card-bg text-accent-orange focus:ring-1 focus:ring-accent-orange focus:ring-offset-0 w-4 h-4 cursor-pointer transition-colors shadow-inner"
+                                    className="sr-only"
                                 />
-                                <span className="text-sm font-bold text-text-muted group-hover:text-white transition-colors">{t}</span>
+                                <span className={`text-sm font-bold transition-colors ${filters.types.includes(t) ? 'text-white' : 'text-text-muted group-hover:text-white/80'}`}>{t}</span>
                             </label>
                         ))}
                     </div>
@@ -70,14 +75,19 @@ export default function FilterPanel({ filters, setFilters, onClose }) {
                     <h3 className="text-xs font-black text-text-muted mb-4 uppercase tracking-widest pl-1">Operator</h3>
                     <div className="space-y-3">
                         {['Government', 'Private'].map(op => (
-                            <label key={op} className="flex items-center gap-3 cursor-pointer group bg-primary-bg/30 p-2 rounded-lg border border-transparent hover:border-border-light transition-all">
+                            <label key={op} className={`flex items-center gap-3 cursor-pointer group p-3 rounded-xl transition-all duration-300 border ${filters.operators.includes(op) ? 'bg-accent-teal/10 border-accent-teal/30 shadow-[inset_0_0_15px_rgba(13,148,136,0.1)]' : 'bg-primary-bg/30 border-transparent hover:bg-primary-bg/60 hover:border-border-light'}`}>
+                                <div className={`w-5 h-5 rounded flex items-center justify-center transition-colors border ${filters.operators.includes(op) ? 'bg-accent-teal border-accent-teal text-white' : 'bg-card-bg border-border-light text-transparent'}`}>
+                                    <svg viewBox="0 0 24 24" fill="none" className="w-3.5 h-3.5" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                </div>
                                 <input
                                     type="checkbox"
                                     checked={filters.operators.includes(op)}
                                     onChange={() => handleOperatorChange(op)}
-                                    className="rounded border-border-light bg-card-bg text-accent-orange focus:ring-1 focus:ring-accent-orange focus:ring-offset-0 w-4 h-4 cursor-pointer transition-colors shadow-inner"
+                                    className="sr-only"
                                 />
-                                <span className="text-sm font-bold text-text-muted group-hover:text-white transition-colors">{op}</span>
+                                <span className={`text-sm font-bold transition-colors ${filters.operators.includes(op) ? 'text-white' : 'text-text-muted group-hover:text-white/80'}`}>{op}</span>
                             </label>
                         ))}
                     </div>
@@ -91,14 +101,19 @@ export default function FilterPanel({ filters, setFilters, onClose }) {
                             { id: 'afternoon', label: 'Afternoon (12:00 - 18:00)' },
                             { id: 'night', label: 'Night (18:00 - 06:00)' }
                         ].map(time => (
-                            <label key={time.id} className="flex items-center gap-3 cursor-pointer group bg-primary-bg/30 p-2 rounded-lg border border-transparent hover:border-border-light transition-all">
+                            <label key={time.id} className={`flex items-center gap-3 cursor-pointer group p-3 rounded-xl transition-all duration-300 border ${filters.times.includes(time.id) ? 'bg-blue-500/10 border-blue-500/30 shadow-[inset_0_0_15px_rgba(59,130,246,0.1)]' : 'bg-primary-bg/30 border-transparent hover:bg-primary-bg/60 hover:border-border-light'}`}>
+                                <div className={`w-5 h-5 rounded flex items-center justify-center transition-colors border ${filters.times.includes(time.id) ? 'bg-blue-500 border-blue-500 text-white' : 'bg-card-bg border-border-light text-transparent'}`}>
+                                    <svg viewBox="0 0 24 24" fill="none" className="w-3.5 h-3.5" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                </div>
                                 <input
                                     type="checkbox"
                                     checked={filters.times.includes(time.id)}
                                     onChange={() => handleTimeChange(time.id)}
-                                    className="rounded border-border-light bg-card-bg text-accent-orange focus:ring-1 focus:ring-accent-orange focus:ring-offset-0 w-4 h-4 cursor-pointer transition-colors shadow-inner"
+                                    className="sr-only"
                                 />
-                                <span className="text-sm font-bold text-text-muted group-hover:text-white transition-colors">{time.label}</span>
+                                <span className={`text-sm font-bold transition-colors ${filters.times.includes(time.id) ? 'text-white' : 'text-text-muted group-hover:text-white/80'}`}>{time.label}</span>
                             </label>
                         ))}
                     </div>
@@ -117,7 +132,7 @@ export default function FilterPanel({ filters, setFilters, onClose }) {
                             step="100"
                             value={filters.maxFare}
                             onChange={(e) => setFilters(prev => ({ ...prev, maxFare: parseInt(e.target.value) }))}
-                            className="w-full accent-accent-orange h-2 bg-primary-bg border border-border-light rounded-lg appearance-none cursor-pointer focus:outline-none"
+                            className="w-full accent-accent-orange h-2 bg-primary-bg border border-border-light rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-accent-orange/50 transition-all"
                         />
                         <div className="flex justify-between mt-3 text-[10px] font-bold text-text-muted/60 uppercase tracking-wider">
                             <span>₹0</span>
@@ -129,7 +144,7 @@ export default function FilterPanel({ filters, setFilters, onClose }) {
 
             <button
                 onClick={() => setFilters({ types: ['Bus', 'Train'], operators: ['Government', 'Private'], times: [], maxFare: 5000 })}
-                className="w-full mt-8 py-3 text-sm font-bold text-text-muted bg-primary-bg/50 border border-border-light rounded-xl hover:text-white hover:bg-white/5 transition-all"
+                className="w-full mt-8 py-3.5 text-sm font-bold text-text-muted bg-primary-bg/50 border border-border-light rounded-xl hover:text-primary-bg hover:bg-white transition-all shadow-sm hover:shadow-md"
             >
                 Reset Filters
             </button>

@@ -32,7 +32,7 @@ export default function SharedTrip() {
     const { searchParams, selectedRoutes, selectedHotels, nights, derived } = tripData;
 
     return (
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-20 fade-in">
+        <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-20 fade-in">
 
             <div className="bg-gradient-to-r from-blue-600/10 to-accent-teal/10 border border-blue-500/20 rounded-2xl p-5 mb-8 flex items-center gap-4 backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
                 <div className="bg-blue-500/20 p-2.5 rounded-xl hidden sm:block border border-blue-500/30 shadow-inner">

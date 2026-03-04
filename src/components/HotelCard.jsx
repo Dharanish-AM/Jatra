@@ -25,10 +25,10 @@ export default function HotelCard({ hotel }) {
 
     const getTagColor = (tag) => {
         switch (tag) {
-            case 'BUDGET': return 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
-            case 'RECOMMENDED': return 'bg-accent-orange/20 text-accent-orange border border-accent-orange/30';
-            case 'LUXURY': return 'bg-purple-500/20 text-purple-300 border border-purple-500/30';
-            default: return 'bg-blue-500/20 text-blue-300 border border-blue-500/30';
+            case 'BUDGET': return 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 shadow-[inset_0_0_10px_rgba(16,185,129,0.2)]';
+            case 'RECOMMENDED': return 'bg-accent-orange/20 text-accent-orange border border-accent-orange/50 shadow-[inset_0_0_10px_rgba(249,115,22,0.2)]';
+            case 'LUXURY': return 'bg-purple-500/20 text-purple-300 border border-purple-500/50 shadow-[inset_0_0_10px_rgba(168,85,247,0.2)]';
+            default: return 'bg-blue-500/20 text-blue-300 border border-blue-500/50 shadow-[inset_0_0_10px_rgba(59,130,246,0.2)]';
         }
     };
 
@@ -42,14 +42,21 @@ export default function HotelCard({ hotel }) {
 
     return (
         <div className="glass-card overflow-hidden flex flex-col hover-lift h-full group border-border-light relative">
-            <div className={`h-52 bg-gradient-to-br ${gradientColors[colorIndex]} relative flex items-center justify-center overflow-hidden`}>
-                {/* Subtle pattern overlay */}
-                <div className="absolute inset-0 opacity-[0.03] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiPgo8cmVjdCB3aWR0aD0iOCIgaGVpZ2h0PSI4IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMSIvPgo8cGF0aCBkPSJNMCAwTDggOFpNOCAwTDAgOFoiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLW9wYWNpdHk9IjAuMSIvPgo8L3N2Zz4=')]"></div>
-
-                {/* Image zoom effect container */}
-                <div className="absolute inset-0 flex items-center justify-center transition-transform duration-700 group-hover:scale-110">
-                    <span className="text-7xl font-black text-white/10 drop-shadow-2xl mix-blend-overlay">{hotel.name.charAt(0)}</span>
-                </div>
+            <div className={`h-52 relative flex items-center justify-center overflow-hidden ${(!hotel.images || hotel.images.length === 0) ? `bg-gradient-to-br ${gradientColors[colorIndex]}` : 'bg-card-bg'}`}>
+                {hotel.images && hotel.images.length > 0 ? (
+                    <img
+                        src={hotel.images[0]}
+                        alt={hotel.name}
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                ) : (
+                    <>
+                        <div className="absolute inset-0 opacity-[0.03] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiPgo8cmVjdCB3aWR0aD0iOCIgaGVpZ2h0PSI4IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMSIvPgo8cGF0aCBkPSJNMCAwTDggOFpNOCAwTDAgOFoiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLW9wYWNpdHk9IjAuMSIvPgo8L3N2Zz4=')]"></div>
+                        <div className="absolute inset-0 flex items-center justify-center transition-transform duration-700 group-hover:scale-110">
+                            <span className="text-7xl font-black text-white/10 drop-shadow-2xl mix-blend-overlay">{hotel.name.charAt(0)}</span>
+                        </div>
+                    </>
+                )}
 
                 {hotel.tag && (
                     <span className={`absolute top-4 right-4 text-[10px] font-black tracking-widest px-3 py-1.5 rounded-lg shadow-xl backdrop-blur-md ${getTagColor(hotel.tag)} text-white uppercase`}>

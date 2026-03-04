@@ -114,7 +114,7 @@ export default function SearchForm() {
                             min={new Date().toISOString().split('T')[0]}
                             value={date}
                             onChange={(e) => setDate(e.target.value)}
-                            className="w-full bg-primary-bg/70 border border-border-light text-white rounded-xl pl-12 pr-4 py-3.5 focus:outline-none focus:border-accent-teal focus:ring-1 focus:ring-accent-teal transition-all shadow-inner font-medium text-sm"
+                            className="w-full bg-primary-bg border border-border-light text-text-primary rounded-xl pl-12 pr-4 py-3.5 focus:outline-none focus:border-accent-teal focus:ring-1 focus:ring-accent-teal transition-all shadow-inner font-medium text-sm"
                         />
                     </div>
 
@@ -128,7 +128,7 @@ export default function SearchForm() {
                             max="9"
                             value={passengers}
                             onChange={(e) => setPassengers(parseInt(e.target.value))}
-                            className="w-full bg-primary-bg/70 border border-border-light text-white rounded-xl pl-12 pr-4 py-3.5 focus:outline-none focus:border-accent-teal focus:ring-1 focus:ring-accent-teal transition-all shadow-inner font-medium text-sm text-center"
+                            className="w-full bg-primary-bg border border-border-light text-text-primary rounded-xl pl-12 pr-4 py-3.5 focus:outline-none focus:border-accent-teal focus:ring-1 focus:ring-accent-teal transition-all shadow-inner font-medium text-sm text-center"
                         />
                     </div>
                 </div>
@@ -148,7 +148,7 @@ export default function SearchForm() {
                             onChange={handleFromChange}
                             onFocus={() => from && setFromSuggestions(CITIES.filter(c => c.toLowerCase().includes(from.toLowerCase())))}
                             onBlur={() => setTimeout(() => setShowFromSuggestions(false), 200)}
-                            className="w-full bg-primary-bg/80 border-2 border-border-light text-white rounded-[14px] pl-12 pr-4 py-4 md:py-5 text-lg font-bold focus:outline-none focus:border-accent-orange focus:bg-primary-bg shadow-inner transition-all placeholder:font-medium placeholder:text-text-muted/50"
+                            className="w-full bg-primary-bg border-2 border-border-light text-text-primary rounded-[14px] pl-12 pr-4 py-4 md:py-5 text-lg font-bold focus:outline-none focus:border-accent-orange focus:bg-primary-bg shadow-inner transition-all placeholder:font-medium placeholder:text-text-muted"
                         />
                         {showFromSuggestions && fromSuggestions.length > 0 && (
                             <ul className="absolute z-50 mt-2 w-full glass-card border-border-light rounded-xl overflow-hidden py-2 animate-fade-in shadow-2xl">
@@ -189,7 +189,7 @@ export default function SearchForm() {
                             onChange={handleToChange}
                             onFocus={() => to && setToSuggestions(CITIES.filter(c => c.toLowerCase().includes(to.toLowerCase()) && c !== from))}
                             onBlur={() => setTimeout(() => setShowToSuggestions(false), 200)}
-                            className="w-full bg-primary-bg/80 border-2 border-border-light text-white rounded-[14px] pl-12 pr-4 py-4 md:py-5 text-lg font-bold focus:outline-none focus:border-accent-teal focus:bg-primary-bg shadow-inner transition-all placeholder:font-medium placeholder:text-text-muted/50"
+                            className="w-full bg-primary-bg border-2 border-border-light text-text-primary rounded-[14px] pl-12 pr-4 py-4 md:py-5 text-lg font-bold focus:outline-none focus:border-accent-teal focus:bg-primary-bg shadow-inner transition-all placeholder:font-medium placeholder:text-text-muted"
                         />
                         {showToSuggestions && toSuggestions.length > 0 && (
                             <ul className="absolute z-50 mt-2 w-full glass-card border-border-light rounded-xl overflow-hidden py-2 animate-fade-in shadow-2xl">

@@ -4,7 +4,7 @@ import { isNearFestival } from '../utils/festivalDates';
 import routesData from '../data/routes.json';
 import FilterPanel from '../components/FilterPanel';
 import RouteCard from '../components/RouteCard';
-import { AlertTriangle, Filter, Bot } from 'lucide-react';
+import { AlertTriangle, Filter, Bot, Layers, Star } from 'lucide-react';
 
 export default function Results() {
     const { searchParams, aiPickedRouteId } = useTrip();
@@ -95,7 +95,7 @@ export default function Results() {
     }
 
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-20 fade-in">
+        <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-20 fade-in">
 
             {festivalAlert && (
                 <div className="mb-8 glass-card bg-yellow-500/10 border-yellow-500/20 p-5 flex items-start gap-4 text-yellow-500 shadow-[0_0_20px_rgba(234,179,8,0.1)] relative overflow-hidden">
@@ -192,26 +192,23 @@ export default function Results() {
                             </div>
                         ))
                     ) : filteredAndSorted.length > 0 ? (
-                        filteredAndSorted.map((route, idx) => (
-                            <div key={route.id} className="relative group">
-                                <RouteCard
-                                    route={route}
-                                    isRecommended={sortBy === 'Cheapest' && idx === 0 || route.tags.includes('RECOMMENDED')}
-                                    isAiPick={route.id === aiPickedRouteId}
-                                />
-                                <div className="absolute top-4 right-4 z-20 flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity bg-primary-bg/80 px-2 py-1 rounded-md border border-border sm:-mr-20 sm:top-1/2 sm:-translate-y-1/2 sm:opacity-100 sm:bg-transparent sm:border-transparent sm:px-0">
-                                    <input
-                                        type="checkbox"
-                                        id={`compare-${route.id}`}
-                                        checked={compareList.find(r => r.id === route.id) || false}
-                                        onChange={() => handleCompareToggle(route)}
-                                        disabled={compareList.length >= 3 && !compareList.find(r => r.id === route.id)}
-                                        className="rounded border-border bg-primary-bg text-accent-orange focus:ring-accent-orange"
+                        filteredAndSorted.map((route, idx) => {
+                            const isComparing = compareList.some(r => r.id === route.id);
+                            const canCompare = compareList.length < 3 || isComparing;
+
+                            return (
+                                <div key={route.id} className="relative group">
+                                    <RouteCard
+                                        route={route}
+                                        isRecommended={sortBy === 'Cheapest' && idx === 0 || route.tags.includes('RECOMMENDED')}
+                                        isAiPick={route.id === aiPickedRouteId}
+                                        onCompare={() => handleCompareToggle(route)}
+                                        isComparing={isComparing}
+                                        canCompare={canCompare}
                                     />
-                                    <label htmlFor={`compare-${route.id}`} className="text-xs font-medium text-text-muted cursor-pointer shrink-0">Compare</label>
                                 </div>
-                            </div>
-                        ))
+                            );
+                        })
                     ) : (
                         <div className="text-center py-24 px-4 glass-card border-dashed border-2 border-border-light">
                             <div className="w-20 h-20 bg-primary-bg/50 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner border border-border-light">

@@ -1,28 +1,32 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary-bg: #09090b; /* Deeper black for premium feel */
-  --color-card-bg: #18181b; /* Richer dark grey */
+  --color-primary-bg: #f8fafc; /* Soft slate/gray for a clean light background */
+  --color-card-bg: #ffffff; /* Crisp white for cards */
   --color-accent-orange: #f97316; /* Keeping the vibrant orange */
   --color-accent-orange-light: #fdba74;
-  --color-accent-teal: #14b8a6;
-  --color-text-primary: #fafafa;
-  --color-text-muted: #a1a1aa;
+  --color-accent-teal: #0d9488; /* Darker teal for better contrast */
+  --color-text-primary: #0f172a; /* Dark slate for primary text, highly readable */
+  --color-text-muted: #64748b; /* Medium slate for muted text */
   --color-gov-badge: #16a34a;
   --color-private-badge: #2563eb;
-  --color-border: #27272a; /* Softer borders */
-  --color-border-light: rgba(255, 255, 255, 0.08);
+  --color-border: #e2e8f0; /* Soft border color */
+  --color-border-light: rgba(0, 0, 0, 0.06); /* Subtle borders */
 
-  --font-sans: "Inter", system-ui, sans-serif;
+  /* Overrides for hardcoded Tailwind classes in the dark theme */
+  --color-white: var(--color-text-primary);
+  --color-black: var(--color-primary-bg);
+
+  --font-sans: "Outfit", system-ui, sans-serif;
 
   --radius-card: 16px; /* Slightly softer corners for premium feel */
   --radius-btn: 10px;
 
   --shadow-hover-lift:
-    0 10px 20px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.2),
-    0 0 0 1px rgba(249, 115, 22, 0.5); /* Glowing shadow */
+    0 10px 20px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02),
+    0 0 0 1px rgba(249, 115, 22, 0.2); /* Soft lifting shadow */
 
-  --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
 
   --animate-gradient-bg: gradient-bg 10s ease infinite;
   --animate-slide-up: slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -80,7 +84,7 @@ body {
 }
 
 .glass {
-  background-color: rgba(24, 24, 27, 0.65); /* Richer, bit more transparent */
+  background-color: rgba(255, 255, 255, 0.7); /* Lighter glass */
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--color-border-light);
@@ -90,8 +94,8 @@ body {
 .glass-card {
   background: linear-gradient(
     145deg,
-    rgba(39, 39, 42, 0.6) 0%,
-    rgba(24, 24, 27, 0.8) 100%
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(248, 250, 252, 0.8) 100%
   );
   backdrop-filter: blur(12px);
   border: 1px solid var(--color-border-light);
