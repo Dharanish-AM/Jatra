@@ -1,16 +1,18 @@
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import routeRoutes from './routes/routeRoutes.js';
 import hotelRoutes from './routes/hotelRoutes.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
-import { env } from './config/env.js';
+
+const clientOrigin = process.env.CLIENT_ORIGIN ?? 'http://localhost:5173';
 
 export const app = express();
 
 app.use(
   cors({
-    origin: env.clientOrigin,
+    origin: clientOrigin,
     credentials: true,
   }),
 );

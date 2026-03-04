@@ -1,12 +1,15 @@
+import 'dotenv/config';
 import { app } from './app.js';
 import { connectDatabase } from './config/db.js';
-import { env } from './config/env.js';
+
+const port = Number.parseInt(process.env.PORT ?? '5050', 10);
+const mongoUri = process.env.MONGODB_URI ?? 'mongodb://127.0.0.1:27017/jatra';
 
 async function startServer() {
-  await connectDatabase(env.mongoUri);
+  await connectDatabase(mongoUri);
 
-  app.listen(env.port, () => {
-    console.log(`🚀 Jatra server running on http://localhost:${env.port}`);
+  app.listen(port, () => {
+    console.log(`🚀 Jatra server running on http://localhost:${port}`);
   });
 }
 

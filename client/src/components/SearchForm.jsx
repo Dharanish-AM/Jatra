@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTrip } from '../context/TripContext';
 import { MapPin, Calendar, Users, Bus, Train, ArrowRightLeft } from 'lucide-react';
@@ -12,10 +12,11 @@ const CITIES = [
 export default function SearchForm() {
     const { searchParams, actions } = useTrip();
     const navigate = useNavigate();
+    const today = new Date().toISOString().split('T')[0];
 
     const [from, setFrom] = useState(searchParams.from || '');
     const [to, setTo] = useState(searchParams.to || '');
-    const [date, setDate] = useState(searchParams.date || new Date().toISOString().split('T')[0]);
+    const [date, setDate] = useState(searchParams.date || today);
     const [passengers, setPassengers] = useState(searchParams.passengers || 1);
     const [type, setType] = useState(searchParams.type || 'Both');
 
@@ -23,6 +24,14 @@ export default function SearchForm() {
     const [toSuggestions, setToSuggestions] = useState([]);
     const [showFromSuggestions, setShowFromSuggestions] = useState(false);
     const [showToSuggestions, setShowToSuggestions] = useState(false);
+
+    useEffect(() => {
+        setFrom(searchParams.from || '');
+        setTo(searchParams.to || '');
+        setDate(searchParams.date || today);
+        setPassengers(searchParams.passengers || 1);
+        setType(searchParams.type || 'Both');
+    }, [searchParams, today]);
 
     const handleFromChange = (e) => {
         const val = e.target.value;
