@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Send, Bot, KeyRound } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { useTrip } from '../context/TripContext';
-import routesData from '../data/routes.json';
-import hotelsData from '../data/hotels.json';
-import { useAIStore } from '../features/ai/store/aiStore';
+import { useTrip } from '../context/TripContext.jsx';
+import { useAIStore } from '../features/ai/store/aiStore.js';
 import { getTravelRecommendation } from '../services/aiService.js';
+import { fetchRoutes, fetchHotels } from '../services/travelApi.js';
 
 export default function AIChatSidebar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -45,15 +44,10 @@ export default function AIChatSidebar() {
     setIsTyping(true);
 
     try {
-      const relevantRoutes = routesData.filter(
-        (route) =>
-          route.from.toLowerCase() === searchParams.from.toLowerCase() &&
-          route.to.toLowerCase() === searchParams.to.toLowerCase(),
-      );
-
-      const relevantHotels = hotelsData.filter(
-        (hotel) => hotel.city.toLowerCase() === searchParams.to.toLowerCase(),
-      );
+      const [relevantRoutes, relevantHotels] = await Promise.all([
+        fetchRoutes({ from: searchParams.from, to: searchParams.to }),
+        fetchHotels({ city: searchParams.to }),
+      ]);
 
       const recommendation = await getTravelRecommendation({
         apiKey,

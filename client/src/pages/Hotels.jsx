@@ -1,9 +1,9 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTrip } from '../context/TripContext';
-import hotelsData from '../data/hotels.json';
 import HotelCard from '../components/HotelCard';
 import { Building2, Navigation, IndianRupee, MapPin, Star, Wifi, Airplay, Coffee, Car } from 'lucide-react';
+import { fetchHotels } from '../services/travelApi';
 
 const destinationbg = {
     varanasi: "https://images.unsplash.com/photo-1627894483216-2138af692e32?q=80&w=2000&auto=format&fit=crop", // Kashi Vishwanath & Ghats
@@ -19,6 +19,7 @@ const HERO_FALLBACK_URL = "https://images.unsplash.com/photo-1548013146-72479768
 export default function Hotels() {
     const { searchParams, derived, nights } = useTrip();
     const navigate = useNavigate();
+    const [hotelsData, setHotelsData] = useState([]);
 
     const destination = searchParams.to;
 
@@ -35,6 +36,23 @@ export default function Hotels() {
     const [maxPrice, setMaxPrice] = useState(25000);
     const [minStars, setMinStars] = useState(0);
     const [selectedAmenities, setSelectedAmenities] = useState([]);
+
+    useEffect(() => {
+        if (!destination) {
+            return;
+        }
+
+        const loadHotels = async () => {
+            try {
+                const hotels = await fetchHotels({ city: destination });
+                setHotelsData(hotels);
+            } catch {
+                setHotelsData([]);
+            }
+        };
+
+        loadHotels();
+    }, [destination]);
 
     const amenitiesList = ['AC', 'WiFi', 'Breakfast', 'Pool', 'Parking'];
 
@@ -56,7 +74,7 @@ export default function Hotels() {
         }
 
         return result;
-    }, [destination, maxPrice, minStars, selectedAmenities]);
+    }, [destination, maxPrice, minStars, selectedAmenities, hotelsData]);
 
     const handleAmenityToggle = (am) => {
         setSelectedAmenities(prev =>

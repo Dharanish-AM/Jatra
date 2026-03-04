@@ -1,6 +1,5 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useTrip } from '../context/TripContext';
-import routesData from '../data/routes.json';
 import FilterPanel from '../components/FilterPanel';
 import RouteCard from '../components/RouteCard';
 import SkeletonCard from '../components/common/SkeletonCard';
@@ -9,10 +8,12 @@ import useRouteFilters from '../hooks/useRouteFilters';
 import { computeRouteInsights } from '../features/routes/utils/routeInsights';
 import RouteMap from '../features/routes/components/RouteMap';
 import { AlertTriangle, Filter, Bot, Layers, Star } from 'lucide-react';
+import { fetchRoutes } from '../services/travelApi';
 
 export default function Results() {
     const { searchParams, aiPickedRouteId } = useTrip();
-    const isLoading = false;
+    const [routesData, setRoutesData] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     const [isFilterOpen, setIsFilterOpen] = useState(false);
     const [compareList, setCompareList] = useState([]);
     const [showCompareModal, setShowCompareModal] = useState(false);
@@ -29,6 +30,27 @@ export default function Results() {
     const festivalAlert = useFestivalAlert(searchParams.date);
     const filteredAndSorted = useRouteFilters(routesData, searchParams, filters, sortBy);
     const routeInsights = useMemo(() => computeRouteInsights(filteredAndSorted), [filteredAndSorted]);
+
+    useEffect(() => {
+        if (!searchParams.from || !searchParams.to) {
+            setRoutesData([]);
+            return;
+        }
+
+        const loadRoutes = async () => {
+            setIsLoading(true);
+            try {
+                const routes = await fetchRoutes({ from: searchParams.from, to: searchParams.to });
+                setRoutesData(routes);
+            } catch {
+                setRoutesData([]);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        loadRoutes();
+    }, [searchParams.from, searchParams.to]);
 
     const handleCompareToggle = (route) => {
         if (compareList.find(r => r.id === route.id)) {
