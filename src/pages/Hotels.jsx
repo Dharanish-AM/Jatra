@@ -6,12 +6,15 @@ import HotelCard from '../components/HotelCard';
 import { Building2, Navigation, IndianRupee, MapPin, Star, Wifi, Airplay, Coffee, Car } from 'lucide-react';
 
 const destinationbg = {
-    varanasi: "https://images.unsplash.com/photo-1627885465922-38378893dce6?q=80&w=2000&auto=format&fit=crop", // Actual Varanasi Ghats
+    varanasi: "https://images.unsplash.com/photo-1627894483216-2138af692e32?q=80&w=2000&auto=format&fit=crop", // Kashi Vishwanath & Ghats
     agra: "https://images.unsplash.com/photo-1564507592208-0282054366fc?q=80&w=2000&auto=format&fit=crop", // Taj Mahal
-    pune: "https://images.unsplash.com/photo-1622308644420-a6211831c26b?q=80&w=2000&auto=format&fit=crop",
-    chennai: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=2000&auto=format&fit=crop",
-    bhubaneswar: "https://images.unsplash.com/photo-1697017637845-a764dff5db12?q=80&w=2000&auto=format&fit=crop",
+    pune: "https://images.unsplash.com/photo-1597074866923-dc0589150358?q=80&w=2000&auto=format&fit=crop", // Pune cityscape
+    chennai: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=2000&auto=format&fit=crop", // Marina Beach
+    bhubaneswar: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=2000&auto=format&fit=crop", // Bhubaneswar fallback scenic
 }
+
+const HERO_FALLBACK_URL = "https://images.unsplash.com/photo-1548013146-72479768bada?q=80&w=2076&auto=format&fit=crop";
+
 
 export default function Hotels() {
     const { searchParams, derived, nights } = useTrip();
@@ -66,7 +69,7 @@ export default function Hotels() {
             <div className="pt-24 flex justify-center items-center h-[50vh]">
                 <div className="text-center">
                     <Building2 className="w-16 h-16 text-text-muted mx-auto mb-4 opacity-50" />
-                    <h2 className="text-xl font-bold text-white mb-2">No destination selected</h2>
+                    <h2 className="text-xl font-bold text-text-primary mb-2">No destination selected</h2>
                     <p className="text-text-muted mb-6">Search for a route first to find hotels.</p>
                     <button onClick={() => navigate('/')} className="px-6 py-2 bg-accent-orange text-white rounded-md hover:bg-[#ea580c] font-medium">
                         Go to Search
@@ -82,8 +85,12 @@ export default function Hotels() {
             <div className="relative h-48 md:h-64 rounded-[var(--radius-card)] overflow-hidden mb-8 flex items-end p-6 md:p-8 bg-[#0f172a] shadow-xl group">
                 {/* Background Image Layer */}
                 <img
-                    src={destinationbg[destination.toLowerCase()] || "https://images.unsplash.com/photo-1548013146-72479768bada?q=80&w=2076"}
+                    src={destinationbg[destination.toLowerCase()] || HERO_FALLBACK_URL}
                     alt={`Hotels in ${destination}`}
+                    onError={(event) => {
+                        event.currentTarget.onerror = null;
+                        event.currentTarget.src = HERO_FALLBACK_URL;
+                    }}
                     className="absolute inset-0 w-full h-full object-cover z-0 transition-transform duration-700 ease-out group-hover:scale-105"
                 />
 
@@ -101,7 +108,7 @@ export default function Hotels() {
                 </div>
             </div>
 
-            <div className="glass-card p-5 mb-8 flex flex-col lg:flex-row gap-6 lg:items-center animate-slide-up" style={{ animationDelay: '0.1s' }}>
+            <div className="premium-panel p-5 mb-8 flex flex-col lg:flex-row gap-6 lg:items-center animate-slide-up" style={{ animationDelay: '0.1s' }}>
 
                 <div className="flex-1 min-w-[200px]">
                     <div className="flex justify-between items-center mb-3">
@@ -126,7 +133,7 @@ export default function Hotels() {
                             <button
                                 key={stars}
                                 onClick={() => setMinStars(stars)}
-                                className={`flex items-center gap-1.5 px-4 py-2 text-sm rounded-lg transition-all duration-300 ${minStars === stars ? 'bg-gradient-to-r from-accent-orange to-accent-orange-light text-primary-bg font-black shadow-[0_4px_12px_rgba(249,115,22,0.3)] scale-105' : 'text-text-muted hover:text-white hover:bg-white/10 font-bold'}`}
+                                className={`flex items-center gap-1.5 px-4 py-2 text-sm rounded-lg transition-all duration-300 ${minStars === stars ? 'bg-gradient-to-r from-accent-orange to-accent-orange-light text-primary-bg font-black shadow-[0_4px_12px_rgba(249,115,22,0.3)] scale-105' : 'text-text-muted hover:text-text-primary hover:bg-white/40 font-bold'}`}
                             >
                                 {stars === 0 ? 'All' : <><Star className={`w-4 h-4 ${minStars === stars ? 'fill-primary-bg' : 'fill-current'}`} /> {stars}</>}
                             </button>
@@ -143,7 +150,7 @@ export default function Hotels() {
                             <button
                                 key={am}
                                 onClick={() => handleAmenityToggle(am)}
-                                className={`flex items-center gap-2 px-3 py-2 rounded-xl border cursor-pointer transition-all duration-300 shadow-sm ${selectedAmenities.includes(am) ? 'bg-accent-teal/20 border-accent-teal text-white shadow-[0_0_15px_rgba(13,148,136,0.3)] scale-105' : 'bg-primary-bg/50 border-border-light text-text-muted hover:border-accent-teal/50 hover:bg-white/5 group'}`}
+                                className={`flex items-center gap-2 px-3 py-2 rounded-xl border cursor-pointer transition-all duration-300 shadow-sm ${selectedAmenities.includes(am) ? 'bg-accent-teal/20 border-accent-teal text-text-primary shadow-[0_0_15px_rgba(13,148,136,0.2)] scale-105' : 'bg-primary-bg/50 border-border-light text-text-muted hover:border-accent-teal/50 hover:bg-white/40 group'}`}
                             >
                                 <div className={`p-1 rounded-md transition-colors ${selectedAmenities.includes(am) ? 'bg-accent-teal text-white' : 'bg-card-bg group-hover:bg-card-bg/80 text-text-muted'}`}>
                                     {getAmenityTypeIcon(am, 14)}
@@ -164,11 +171,11 @@ export default function Hotels() {
             ) : (
                 <div className="text-center py-24 px-4 glass-card border-dashed border-2 border-border-light">
                     <Building2 className="w-16 h-16 text-text-muted/30 mx-auto mb-5" />
-                    <h3 className="text-2xl font-black text-white mb-2 tracking-wide">No hotels found</h3>
+                    <h3 className="text-2xl font-black text-text-primary mb-2 tracking-wide">No hotels found</h3>
                     <p className="text-text-muted mb-8 font-medium">Try adjusting your filters to see more options.</p>
                     <button
                         onClick={() => { setMaxPrice(25000); setMinStars(0); setSelectedAmenities([]); }}
-                        className="bg-primary-bg/50 border border-border-light font-bold text-white px-8 py-3 rounded-xl hover:bg-white/5 transition-colors shadow-sm"
+                        className="bg-primary-bg/50 border border-border-light font-bold text-text-primary px-8 py-3 rounded-xl hover:bg-card-bg transition-colors shadow-sm"
                     >
                         Clear Filters
                     </button>
@@ -179,7 +186,7 @@ export default function Hotels() {
                 <div className="flex justify-between items-center mb-4 pb-4 border-b border-border-light">
                     <div className="flex items-center gap-3">
                         <span className="bg-emerald-500/10 text-emerald-400 p-2 rounded-lg border border-emerald-500/20 shadow-inner"><IndianRupee className="w-4 h-4" /></span>
-                        <span className="font-extrabold text-white tracking-wide">Trip Subtotal</span>
+                        <span className="font-extrabold text-text-primary tracking-wide">Trip Subtotal</span>
                     </div>
                     <span className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-accent-orange to-accent-orange-light">₹{derived.totalFare + derived.totalHotelCost}</span>
                 </div>

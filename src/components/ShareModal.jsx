@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
-import { X, Copy, Check, Download, MessageCircle, ExternalLink } from 'lucide-react';
+import { X, Copy, Check, Download, Share2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useTrip } from '../context/TripContext';
 import { encodeItinerary } from '../utils/itineraryEncoder';
@@ -30,6 +30,25 @@ export default function ShareModal({ onClose }) {
     const shareOnWhatsApp = () => {
         const text = `Check out my trip plan on Jatra!\nFrom: ${searchParams.from} to ${searchParams.to}\nTotal Cost: ₹${derived.grandTotal}\n\nView itinerary here: ${shareUrl}`;
         window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+    };
+
+    const shareNatively = async () => {
+        if (!navigator.share) {
+            toast.error('Native sharing is not supported in this browser.');
+            return;
+        }
+
+        try {
+            await navigator.share({
+                title: `Jatra Trip: ${searchParams.from} to ${searchParams.to}`,
+                text: `Trip estimate: ₹${derived.grandTotal}`,
+                url: shareUrl,
+            });
+        } catch (error) {
+            if (error?.name !== 'AbortError') {
+                toast.error('Unable to open native share dialog.');
+            }
+        }
     };
 
     const downloadText = () => {
@@ -65,13 +84,13 @@ export default function ShareModal({ onClose }) {
     };
 
     return (
-        <div className="fixed inset-0 z-[100] bg-black/80 flex items-center justify-center p-4 backdrop-blur-md animate-in fade-in">
-            <div className="glass-card w-full max-w-2xl border border-border-light/50 shadow-2xl flex flex-col max-h-[90vh] overflow-hidden">
+        <div className="fixed inset-0 z-[100] bg-black/80 flex items-center justify-center p-4 backdrop-blur-md animate-in fade-in" role="presentation">
+            <div className="glass-card w-full max-w-2xl border border-border-light/50 shadow-2xl flex flex-col max-h-[90vh] overflow-hidden" role="dialog" aria-modal="true" aria-label="Share your itinerary">
 
                 <div className="flex justify-between items-center p-6 border-b border-border-light bg-card-bg/80 relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-r from-transparent to-accent-orange/10 pointer-events-none"></div>
                     <h2 className="text-2xl font-black text-white relative z-10 tracking-wide">Your trip is ready to share! 🎉</h2>
-                    <button onClick={onClose} className="text-text-muted hover:text-white bg-primary-bg/50 border border-border-light p-2 rounded-xl relative z-10 transition-colors shadow-sm">
+                    <button aria-label="Close share modal" onClick={onClose} className="text-text-muted hover:text-white bg-primary-bg/50 border border-border-light p-2 rounded-xl relative z-10 transition-colors shadow-sm">
                         <X className="w-5 h-5" />
                     </button>
                 </div>
@@ -111,6 +130,7 @@ export default function ShareModal({ onClose }) {
                                 />
                                 <button
                                     onClick={copyToClipboard}
+                                    aria-label="Copy share link"
                                     className={`p-3.5 rounded-xl font-bold flex shrink-0 items-center justify-center transition-all shadow-md ${copied ? 'bg-emerald-500 text-white' : 'bg-primary-bg/50 border border-border-light text-text-muted hover:border-accent-orange hover:text-accent-orange'
                                         }`}
                                 >
@@ -122,6 +142,13 @@ export default function ShareModal({ onClose }) {
                         <div className="w-full h-px bg-border-light"></div>
 
                         <div className="space-y-4">
+                            <button
+                                onClick={shareNatively}
+                                className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 hover:opacity-90 text-white font-black py-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-[0_4px_15px_rgba(59,130,246,0.3)]"
+                            >
+                                <Share2 className="w-5 h-5" /> Share via Device
+                            </button>
+
                             <button
                                 onClick={shareOnWhatsApp}
                                 className="w-full bg-gradient-to-r from-[#25D366] to-[#1ebd5a] hover:opacity-90 text-white font-black py-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-[0_4px_15px_rgba(37,211,102,0.3)] hover:shadow-[0_4px_25px_rgba(37,211,102,0.5)] hover-lift"

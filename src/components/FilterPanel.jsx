@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { SlidersHorizontal, X } from 'lucide-react';
 
-export default function FilterPanel({ filters, setFilters, onClose }) {
+function FilterPanel({ filters, setFilters, onClose }) {
 
     const handleTypeChange = (type) => {
         setFilters(prev => {
@@ -42,7 +42,7 @@ export default function FilterPanel({ filters, setFilters, onClose }) {
                 </h2>
 
                 {onClose && (
-                    <button onClick={onClose} className="md:hidden p-1.5 bg-primary-bg/50 rounded-md text-text-muted hover:text-white transition-colors border border-border-light">
+                    <button aria-label="Close filters" onClick={onClose} className="md:hidden p-1.5 bg-primary-bg/50 rounded-md text-text-muted hover:text-white transition-colors border border-border-light">
                         <X className="w-5 h-5" />
                     </button>
                 )}
@@ -132,6 +132,7 @@ export default function FilterPanel({ filters, setFilters, onClose }) {
                             step="100"
                             value={filters.maxFare}
                             onChange={(e) => setFilters(prev => ({ ...prev, maxFare: parseInt(e.target.value) }))}
+                            aria-label="Maximum fare filter"
                             className="w-full accent-accent-orange h-2 bg-primary-bg border border-border-light rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-accent-orange/50 transition-all"
                         />
                         <div className="flex justify-between mt-3 text-[10px] font-bold text-text-muted/60 uppercase tracking-wider">
@@ -144,6 +145,7 @@ export default function FilterPanel({ filters, setFilters, onClose }) {
 
             <button
                 onClick={() => setFilters({ types: ['Bus', 'Train'], operators: ['Government', 'Private'], times: [], maxFare: 5000 })}
+                aria-label="Reset all filters"
                 className="w-full mt-8 py-3.5 text-sm font-bold text-text-muted bg-primary-bg/50 border border-border-light rounded-xl hover:text-primary-bg hover:bg-white transition-all shadow-sm hover:shadow-md"
             >
                 Reset Filters
@@ -151,3 +153,5 @@ export default function FilterPanel({ filters, setFilters, onClose }) {
         </div>
     );
 }
+
+export default memo(FilterPanel);

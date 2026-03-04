@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Star, MapPin, CheckSquare, Wifi, Airplay, Coffee, Car } from 'lucide-react';
 import { useTrip } from '../context/TripContext';
 import toast from 'react-hot-toast';
 
-export default function HotelCard({ hotel }) {
+function HotelCard({ hotel }) {
     const { actions } = useTrip();
     const navigate = useNavigate();
 
@@ -25,10 +25,10 @@ export default function HotelCard({ hotel }) {
 
     const getTagColor = (tag) => {
         switch (tag) {
-            case 'BUDGET': return 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 shadow-[inset_0_0_10px_rgba(16,185,129,0.2)]';
+            case 'BUDGET': return 'bg-emerald-500/15 text-emerald-700 border border-emerald-500/35 shadow-[inset_0_0_10px_rgba(16,185,129,0.1)]';
             case 'RECOMMENDED': return 'bg-accent-orange/20 text-accent-orange border border-accent-orange/50 shadow-[inset_0_0_10px_rgba(249,115,22,0.2)]';
-            case 'LUXURY': return 'bg-purple-500/20 text-purple-300 border border-purple-500/50 shadow-[inset_0_0_10px_rgba(168,85,247,0.2)]';
-            default: return 'bg-blue-500/20 text-blue-300 border border-blue-500/50 shadow-[inset_0_0_10px_rgba(59,130,246,0.2)]';
+            case 'LUXURY': return 'bg-purple-500/15 text-purple-700 border border-purple-500/35 shadow-[inset_0_0_10px_rgba(168,85,247,0.1)]';
+            default: return 'bg-blue-500/15 text-blue-700 border border-blue-500/35 shadow-[inset_0_0_10px_rgba(59,130,246,0.1)]';
         }
     };
 
@@ -59,18 +59,18 @@ export default function HotelCard({ hotel }) {
                 )}
 
                 {hotel.tag && (
-                    <span className={`absolute top-4 right-4 text-[10px] font-black tracking-widest px-3 py-1.5 rounded-lg shadow-xl backdrop-blur-md ${getTagColor(hotel.tag)} text-white uppercase`}>
+                    <span className={`absolute top-4 right-4 text-[10px] font-black tracking-widest px-3 py-1.5 rounded-lg shadow-xl backdrop-blur-md ${getTagColor(hotel.tag)} uppercase`}>
                         {hotel.tag}
                     </span>
                 )}
 
                 {/* Inner shadow at bottom of image area */}
-                <div className="absolute bottom-0 w-full h-20 bg-gradient-to-t from-card-bg to-transparent"></div>
+                <div className="absolute bottom-0 w-full h-20 bg-gradient-to-t from-white/70 to-transparent"></div>
             </div>
 
             <div className="p-6 flex flex-col flex-1 relative z-10 bg-card-bg/50 backdrop-blur-md">
                 <div className="flex justify-between items-start mb-3 gap-3">
-                    <h3 className="font-extrabold text-xl text-white leading-tight tracking-wide group-hover:text-accent-orange transition-colors">{hotel.name}</h3>
+                    <h3 className="font-extrabold text-xl text-text-primary leading-tight tracking-wide group-hover:text-accent-orange transition-colors">{hotel.name}</h3>
                     <div className="flex bg-yellow-500/10 px-2.5 py-1 rounded-md text-yellow-500 text-sm font-black items-center gap-1.5 shrink-0 border border-yellow-500/20 shadow-sm">
                         <Star className="w-3.5 h-3.5 fill-current" /> {hotel.rating}
                     </div>
@@ -80,7 +80,7 @@ export default function HotelCard({ hotel }) {
                     {Array(hotel.stars).fill(0).map((_, i) => (
                         <Star key={i} className="w-4 h-4 fill-current" />
                     ))}
-                    <span className="text-text-muted text-xs font-bold ml-1.5 bg-primary-bg/50 px-2 py-0.5 rounded-md border border-border-light">{hotel.reviewCount} reviews</span>
+                        <span className="text-text-muted text-xs font-bold ml-1.5 bg-primary-bg/50 px-2 py-0.5 rounded-md border border-border-light">{hotel.reviewCount} reviews</span>
                 </div>
 
                 <div className="flex items-center gap-2 text-text-muted text-sm mb-5 font-medium bg-primary-bg/20 p-2 rounded-lg border border-border-light">
@@ -108,13 +108,14 @@ export default function HotelCard({ hotel }) {
                 <div className="flex items-end justify-between mt-auto pt-5 border-t border-border-light">
                     <div>
                         <p className="text-[10px] text-text-muted font-black tracking-widest uppercase mb-1">Price</p>
-                        <p className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-white/70">
+                        <p className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-text-primary to-text-primary/70">
                             ₹{hotel.pricePerNight}<span className="text-sm font-bold text-text-muted/60 tracking-normal ml-1">/ night</span>
                         </p>
                     </div>
 
                     <button
                         onClick={handleSelect}
+                        aria-label={`Select hotel ${hotel.name}`}
                         className="bg-card-bg border border-accent-orange/50 text-accent-orange hover:bg-gradient-to-r hover:from-accent-orange hover:to-accent-orange-light hover:text-primary-bg px-6 py-3 rounded-xl font-bold transition-all duration-300 hover:shadow-[0_0_20px_rgba(249,115,22,0.4)] hover:border-transparent"
                     >
                         Select
@@ -124,3 +125,5 @@ export default function HotelCard({ hotel }) {
         </div>
     );
 }
+
+export default memo(HotelCard);

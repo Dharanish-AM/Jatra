@@ -1,8 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 import SearchForm from '../components/SearchForm';
-import { MapPin, ArrowRight, Sparkles, Calendar } from 'lucide-react';
+import { MapPin, ArrowRight, Sparkles } from 'lucide-react';
 import { useTrip } from '../context/TripContext';
+
+const TOMORROW_DATE = (() => {
+    const date = new Date();
+    date.setDate(date.getDate() + 1);
+    return date.toISOString().split('T')[0];
+})();
 
 const popularRoutes = [
     { from: 'Delhi', to: 'Varanasi' },
@@ -14,19 +19,13 @@ const popularRoutes = [
 ];
 
 export default function Home() {
-    const navigate = useNavigate();
     const { actions } = useTrip();
-    const [isVisible, setIsVisible] = useState(false);
-
-    useEffect(() => {
-        setIsVisible(true);
-    }, []);
 
     const handlePopularClick = (route) => {
         actions.setSearch({
             from: route.from,
             to: route.to,
-            date: new Date(Date.now() + 86400000).toISOString().split('T')[0],
+            date: TOMORROW_DATE,
             passengers: 1,
             type: 'Both',
         });
@@ -42,12 +41,12 @@ export default function Home() {
 
             <div className="relative flex-1 flex flex-col py-12 px-4 sm:px-6 lg:px-8 z-10">
 
-                <div className={`w-full mx-auto flex-1 flex flex-col justify-center pb-20 mt-10 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-                    <div className="text-center mb-16">
+                <div className="w-full mx-auto flex-1 flex flex-col justify-center pb-20 mt-10 transition-all duration-1000 opacity-100 translate-y-0">
+                    <div className="text-center mb-14">
                         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-accent-orange/30 bg-accent-orange/10 text-accent-orange text-sm font-semibold mb-6 shadow-[0_0_15px_rgba(249,115,22,0.15)]">
                             <Sparkles className="w-4 h-4" /> The New Standard in Travel
                         </div>
-                        <h1 className="text-6xl md:text-8xl font-black tracking-tighter mb-6 leading-tight text-white drop-shadow-2xl">
+                        <h1 className="text-5xl md:text-7xl font-black tracking-tighter mb-6 leading-tight text-text-primary">
                             Journey Across <br className="md:hidden" />
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-orange via-accent-orange-light to-accent-teal drop-shadow-[0_0_25px_rgba(249,115,22,0.4)]">
                                 India
@@ -58,8 +57,8 @@ export default function Home() {
                         </p>
                     </div>
 
-                    <div className="glass-card p-6 md:p-8 relative z-20 animate-slide-up transform-gpu mx-auto w-full max-w-4xl shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
-                        <div className="absolute -inset-1 bg-gradient-to-r from-accent-orange/30 to-accent-teal/30 rounded-[var(--radius-card)] blur opacity-50 z-[-1]"></div>
+                    <div className="premium-panel p-6 md:p-8 relative z-20 animate-slide-up transform-gpu mx-auto w-full max-w-4xl shadow-[0_20px_50px_rgba(15,23,42,0.12)]">
+                        <div className="absolute -inset-1 bg-gradient-to-r from-accent-orange/25 to-accent-teal/20 rounded-[var(--radius-card)] blur opacity-45 z-[-1]"></div>
                         <SearchForm />
                     </div>
 
@@ -70,12 +69,12 @@ export default function Home() {
                                 <button
                                     key={idx}
                                     onClick={() => handlePopularClick(route)}
-                                    className="group flex items-center gap-3 px-6 py-3 rounded-full border border-border-light bg-card-bg/40 backdrop-blur-md hover:bg-white/5 hover:border-accent-orange/50 transition-all duration-300 hover:shadow-[0_0_20px_rgba(249,115,22,0.2)] hover:-translate-y-1"
+                                    className="group flex items-center gap-3 px-6 py-3 rounded-full border border-border-light bg-card-bg/70 backdrop-blur-md hover:bg-card-bg hover:border-accent-orange/50 transition-all duration-300 hover:shadow-[0_0_20px_rgba(249,115,22,0.18)] hover:-translate-y-1"
                                 >
                                     <MapPin className="w-4 h-4 text-accent-orange group-hover:scale-110 transition-transform" />
-                                    <span className="text-sm font-semibold text-white tracking-wide">{route.from}</span>
-                                    <ArrowRight className="w-3.5 h-3.5 text-text-muted group-hover:text-white transition-colors" />
-                                    <span className="text-sm font-semibold text-text-muted group-hover:text-white transition-colors tracking-wide">{route.to}</span>
+                                    <span className="text-sm font-semibold text-text-primary tracking-wide">{route.from}</span>
+                                    <ArrowRight className="w-3.5 h-3.5 text-text-muted group-hover:text-text-primary transition-colors" />
+                                    <span className="text-sm font-semibold text-text-muted group-hover:text-text-primary transition-colors tracking-wide">{route.to}</span>
                                 </button>
                             ))}
                         </div>

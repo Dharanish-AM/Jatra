@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Bus, Train, Clock, Star, Wifi, Zap, Coffee, ChevronRight, Check } from 'lucide-react';
 import { useTrip } from '../context/TripContext';
 import toast from 'react-hot-toast';
 
-export default function RouteCard({ route, isRecommended, isAiPick, onCompare, isComparing, canCompare }) {
+function RouteCard({ route, isRecommended, isAiPick, onCompare, isComparing, canCompare, insightBadges = [] }) {
     const { actions, selectedRoutes } = useTrip();
 
     const isAdded = selectedRoutes.some(r => r.id === route.id);
@@ -45,14 +45,14 @@ export default function RouteCard({ route, isRecommended, isAiPick, onCompare, i
                         <div className={`p-1.5 rounded-lg ${route.type === 'train' ? 'bg-blue-500/20 text-blue-400' : 'bg-emerald-500/20 text-emerald-400'}`}>
                             {route.type === 'train' ? <Train className="w-5 h-5" /> : <Bus className="w-5 h-5" />}
                         </div>
-                        <h3 className="font-bold text-lg text-white">{route.operator}</h3>
+                        <h3 className="font-bold text-lg text-text-primary">{route.operator}</h3>
                         <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide ${route.isGovernment ? 'bg-gov-badge/20 text-gov-badge border border-gov-badge/30' : 'bg-private-badge/20 text-blue-400 border border-private-badge/30'}`}>
                             {route.isGovernment ? 'GOVT' : 'PRIVATE'}
                         </span>
                     </div>
                     <p className="text-text-muted text-sm mb-4 font-medium">{route.name} • {route.classes.join(', ')}</p>
 
-                    <div className="flex items-center gap-4 text-white">
+                    <div className="flex items-center gap-4 text-text-primary">
                         <div className="text-center">
                             <p className="text-2xl font-bold">{route.departure}</p>
                             <p className="text-xs text-text-muted font-medium">{route.from}</p>
@@ -79,15 +79,16 @@ export default function RouteCard({ route, isRecommended, isAiPick, onCompare, i
 
                         <div className="flex items-center sm:justify-end gap-1 mt-2 text-yellow-400">
                             <Star className="w-3 h-3 fill-current" />
-                            <span className="text-sm font-bold text-white">{route.rating}</span>
+                            <span className="text-sm font-bold text-text-primary">{route.rating}</span>
                         </div>
                     </div>
 
                     <button
                         onClick={handleAdd}
+                        aria-label={isAdded ? `Remove ${route.name} from trip` : `Add ${route.name} to trip`}
                         className={`px-5 py-2.5 rounded-[var(--radius-btn)] font-semibold flex items-center gap-1 transition-all ${isAdded
                             ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/30'
-                            : 'bg-accent-orange text-white hover:bg-[#ea580c] shadow-[0_0_10px_rgba(249,115,22,0.2)]'
+                                : 'bg-accent-orange text-white hover:bg-[#ea580c] shadow-[0_0_10px_rgba(249,115,22,0.2)]'
                             }`}
                     >
                         {isAdded ? 'Added' : 'Add to Trip'}
@@ -97,6 +98,15 @@ export default function RouteCard({ route, isRecommended, isAiPick, onCompare, i
             </div>
 
             <div className="mt-4 pt-3 border-t border-border/50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-xs text-text-muted">
+                {insightBadges.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5">
+                        {insightBadges.map((badge) => (
+                            <span key={badge} className="px-2 py-1 rounded-full bg-primary-bg border border-border-light text-[10px] font-black tracking-wide text-text-primary">
+                                {badge}
+                            </span>
+                        ))}
+                    </div>
+                )}
                 <div className="flex flex-wrap gap-2">
                     {route.amenities.map(am => (
                         <span key={am} className="flex items-center gap-1 bg-primary-bg px-2 py-1 rounded-md border border-border">
@@ -108,6 +118,7 @@ export default function RouteCard({ route, isRecommended, isAiPick, onCompare, i
                     <button
                         onClick={onCompare}
                         disabled={!canCompare}
+                        aria-label={isComparing ? `Remove ${route.name} from compare` : `Compare ${route.name}`}
                         className={`flex justify-center items-center gap-1.5 px-4 py-2 w-full sm:w-auto rounded-full border shadow-sm transition-all duration-300 ${isComparing
                             ? 'bg-accent-orange border-accent-orange text-white'
                             : 'bg-primary-bg/80 border-border-light text-text-muted hover:border-accent-orange/50 hover:text-white'
@@ -123,3 +134,5 @@ export default function RouteCard({ route, isRecommended, isAiPick, onCompare, i
         </div>
     );
 }
+
+export default memo(RouteCard);

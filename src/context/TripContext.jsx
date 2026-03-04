@@ -1,82 +1,62 @@
-import React, { createContext, useReducer, useEffect, useContext } from 'react';
+import React, { createContext, useContext } from 'react';
+import { useSearchStore } from '../features/search/store/searchStore';
+import { useTripStore } from '../features/trip/store/tripStore';
+import { useAIStore } from '../features/ai/store/aiStore';
+import { calculateTripCost } from '../hooks/useTripCost';
 
 const TripContext = createContext(null);
 
-const initialState = {
-    searchParams: { from: '', to: '', date: '', passengers: 1, type: 'Both' },
-    selectedRoutes: [],
-    selectedHotels: [],
-    nights: 1,
-    aiPickedRouteId: null,
-};
-
-function tripReducer(state, action) {
-    switch (action.type) {
-        case 'SET_SEARCH':
-            return { ...state, searchParams: { ...state.searchParams, ...action.payload } };
-        case 'ADD_ROUTE':
-            return { ...state, selectedRoutes: [...state.selectedRoutes, action.payload] };
-        case 'REMOVE_ROUTE':
-            return { ...state, selectedRoutes: state.selectedRoutes.filter(r => r.id !== action.payload) };
-        case 'ADD_HOTEL':
-            return { ...state, selectedHotels: [...state.selectedHotels, action.payload] };
-        case 'REMOVE_HOTEL':
-            return { ...state, selectedHotels: state.selectedHotels.filter(h => h.id !== action.payload) };
-        case 'SET_NIGHTS':
-            return { ...state, nights: action.payload };
-        case 'SET_AI_PICK':
-            return { ...state, aiPickedRouteId: action.payload };
-        case 'CLEAR_TRIP':
-            return { ...initialState, searchParams: state.searchParams };
-        case 'HYDRATE':
-            return { ...action.payload };
-        default:
-            return state;
-    }
-}
-
 export function TripProvider({ children }) {
-    const [state, dispatch] = useReducer(tripReducer, initialState, (initial) => {
-        try {
-            const persisted = sessionStorage.getItem('jatra_trip_state');
-            return persisted ? JSON.parse(persisted) : initial;
-        } catch {
-            return initial;
-        }
+    const searchParams = useSearchStore((state) => state.searchParams);
+    const setSearch = useSearchStore((state) => state.setSearch);
+
+    const selectedRoutes = useTripStore((state) => state.selectedRoutes);
+    const selectedHotels = useTripStore((state) => state.selectedHotels);
+    const nights = useTripStore((state) => state.nights);
+    const addRoute = useTripStore((state) => state.addRoute);
+    const removeRoute = useTripStore((state) => state.removeRoute);
+    const addHotel = useTripStore((state) => state.addHotel);
+    const removeHotel = useTripStore((state) => state.removeHotel);
+    const setNights = useTripStore((state) => state.setNights);
+    const clearTripItems = useTripStore((state) => state.clearTripItems);
+    const hydrateTrip = useTripStore((state) => state.hydrateTrip);
+
+    const aiPickedRouteId = useAIStore((state) => state.aiPickedRouteId);
+    const setAiPick = useAIStore((state) => state.setAiPick);
+
+    const derived = calculateTripCost({
+        selectedRoutes,
+        selectedHotels,
+        nights,
+        passengers: searchParams.passengers,
     });
 
-    useEffect(() => {
-        sessionStorage.setItem('jatra_trip_state', JSON.stringify(state));
-    }, [state]);
-
-    const totalFare = state.selectedRoutes.reduce((acc, route) => acc + (route.fare * state.searchParams.passengers), 0);
-    const totalHotelCost = state.selectedHotels.reduce((acc, hotel) => acc + (hotel.pricePerNight * state.nights), 0);
-    const grandTotal = totalFare + totalHotelCost;
-
     const actions = {
-        setSearch: (params) => dispatch({ type: 'SET_SEARCH', payload: params }),
-        addRoute: (route) => dispatch({ type: 'ADD_ROUTE', payload: route }),
-        removeRoute: (routeId) => dispatch({ type: 'REMOVE_ROUTE', payload: routeId }),
-        addHotel: (hotel) => dispatch({ type: 'ADD_HOTEL', payload: hotel }),
-        removeHotel: (hotelId) => dispatch({ type: 'REMOVE_HOTEL', payload: hotelId }),
-        setNights: (nights) => dispatch({ type: 'SET_NIGHTS', payload: nights }),
-        setAiPick: (routeId) => dispatch({ type: 'SET_AI_PICK', payload: routeId }),
-        clearTrip: () => dispatch({ type: 'CLEAR_TRIP' }),
+        setSearch,
+        addRoute,
+        removeRoute,
+        addHotel,
+        removeHotel,
+        setNights,
+        setAiPick,
+        clearTrip: clearTripItems,
+        hydrate: hydrateTrip,
     };
 
     const value = {
-        ...state,
+        searchParams,
+        selectedRoutes,
+        selectedHotels,
+        nights,
+        aiPickedRouteId,
         actions,
-        derived: {
-            totalFare,
-            totalHotelCost,
-            grandTotal,
-        }
+        derived,
     };
 
     return <TripContext.Provider value={value}>{children}</TripContext.Provider>;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useTrip() {
     const context = useContext(TripContext);
     if (!context) {

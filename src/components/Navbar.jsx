@@ -32,7 +32,7 @@ export default function Navbar() {
             <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
                 <Link to="/" className="flex items-center gap-2 group">
                     <Map className="w-8 h-8 text-accent-orange flex-shrink-0 transition-transform duration-300 group-hover:rotate-[-10deg] group-hover:scale-110 drop-shadow-[0_0_8px_rgba(249,115,22,0.4)]" />
-                    <span className="text-2xl font-extrabold tracking-tight text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-accent-orange group-hover:to-accent-orange-light transition-all duration-300">
+                    <span className="text-2xl font-extrabold tracking-tight text-text-primary group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-accent-orange group-hover:to-accent-orange-light transition-all duration-300">
                         Jatra
                     </span>
                 </Link>
@@ -43,7 +43,7 @@ export default function Navbar() {
                             key={link.name}
                             to={link.path}
                             className={({ isActive }) =>
-                                `relative font-medium text-sm tracking-wide transition-all duration-300 group ${isActive ? 'text-accent-orange' : 'text-text-muted hover:text-white'}`
+                                `relative font-semibold text-sm tracking-wide transition-all duration-300 group ${isActive ? 'text-accent-orange' : 'text-text-muted hover:text-text-primary'}`
                             }
                         >
                             {({ isActive }) => (
@@ -60,7 +60,7 @@ export default function Navbar() {
                         className={({ isActive }) =>
                             `relative px-5 py-2.5 rounded-[var(--radius-btn)] font-semibold text-sm tracking-wide transition-all duration-300 hover-lift ${isActive
                                 ? 'bg-gradient-to-r from-accent-orange to-accent-orange-light text-primary-bg shadow-[0_0_20px_rgba(249,115,22,0.4)] border-none'
-                                : 'bg-card-bg/80 text-white border border-border-light hover:border-accent-orange/50 hover:bg-card-bg shadow-sm'
+                                : 'bg-card-bg/80 text-text-primary border border-border-light hover:border-accent-orange/50 hover:bg-card-bg shadow-sm'
                             }`
                         }
                     >
@@ -76,7 +76,7 @@ export default function Navbar() {
                 <div className="md:hidden flex items-center">
                     <button
                         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                        className="text-text-muted hover:text-white p-2 transition-colors duration-200"
+                        className="text-text-muted hover:text-text-primary p-2 transition-colors duration-200"
                     >
                         {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
                     </button>
@@ -92,7 +92,7 @@ export default function Navbar() {
                             to={link.path}
                             onClick={() => setMobileMenuOpen(false)}
                             className={({ isActive }) =>
-                                `block px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 ${isActive ? 'bg-accent-orange/15 text-accent-orange border border-accent-orange/20' : 'text-text-muted hover:text-white hover:bg-card-bg/80'
+                                `block px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 ${isActive ? 'bg-accent-orange/15 text-accent-orange border border-accent-orange/20' : 'text-text-muted hover:text-text-primary hover:bg-card-bg/80'
                                 }`
                             }
                         >

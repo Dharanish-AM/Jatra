@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTrip } from '../context/TripContext';
 import { MapPin, Calendar, Users, Bus, Train, ArrowRightLeft } from 'lucide-react';
@@ -23,14 +23,6 @@ export default function SearchForm() {
     const [toSuggestions, setToSuggestions] = useState([]);
     const [showFromSuggestions, setShowFromSuggestions] = useState(false);
     const [showToSuggestions, setShowToSuggestions] = useState(false);
-
-    useEffect(() => {
-        setFrom(searchParams.from);
-        setTo(searchParams.to);
-        setDate(searchParams.date || new Date().toISOString().split('T')[0]);
-        setPassengers(searchParams.passengers);
-        setType(searchParams.type);
-    }, [searchParams]);
 
     const handleFromChange = (e) => {
         const val = e.target.value;
@@ -79,6 +71,7 @@ export default function SearchForm() {
         navigate('/results');
     };
 
+
     const transportTypes = [
         { id: 'Bus', icon: <Bus className="w-5 h-5" />, label: 'Bus' },
         { id: 'Train', icon: <Train className="w-5 h-5" />, label: 'Train' },
@@ -88,7 +81,7 @@ export default function SearchForm() {
     return (
         <form onSubmit={handleSearch} className="flex flex-col gap-5 relative z-10 w-full">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4 border-b border-border-light pb-5">
-                <div className="flex bg-primary-bg/50 p-1.5 rounded-xl border border-white/5 shadow-inner w-full md:w-auto overflow-x-auto">
+                <div className="flex bg-primary-bg/70 p-1.5 rounded-xl border border-border-light shadow-inner w-full md:w-auto overflow-x-auto">
                     {transportTypes.map(t => (
                         <button
                             key={t.id}
@@ -96,7 +89,7 @@ export default function SearchForm() {
                             onClick={() => setType(t.id)}
                             className={`flex-1 md:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 ${type === t.id
                                 ? 'bg-gradient-to-r from-accent-orange to-accent-orange-light text-primary-bg shadow-[0_4px_15px_rgba(249,115,22,0.3)]'
-                                : 'text-text-muted hover:text-white hover:bg-white/10'
+                                : 'text-text-muted hover:text-text-primary hover:bg-white/50'
                                 }`}
                         >
                             {t.icon} <span>{t.label}</span>
@@ -114,7 +107,7 @@ export default function SearchForm() {
                             min={new Date().toISOString().split('T')[0]}
                             value={date}
                             onChange={(e) => setDate(e.target.value)}
-                            className="w-full bg-primary-bg border border-border-light text-text-primary rounded-xl pl-12 pr-4 py-3.5 focus:outline-none focus:border-accent-teal focus:ring-1 focus:ring-accent-teal transition-all shadow-inner font-medium text-sm"
+                            className="w-full bg-card-bg border border-border-light text-text-primary rounded-xl pl-12 pr-4 py-3.5 focus:outline-none focus:border-accent-teal focus:ring-1 focus:ring-accent-teal transition-all shadow-inner font-medium text-sm"
                         />
                     </div>
 
@@ -128,7 +121,7 @@ export default function SearchForm() {
                             max="9"
                             value={passengers}
                             onChange={(e) => setPassengers(parseInt(e.target.value))}
-                            className="w-full bg-primary-bg border border-border-light text-text-primary rounded-xl pl-12 pr-4 py-3.5 focus:outline-none focus:border-accent-teal focus:ring-1 focus:ring-accent-teal transition-all shadow-inner font-medium text-sm text-center"
+                            className="w-full bg-card-bg border border-border-light text-text-primary rounded-xl pl-12 pr-4 py-3.5 focus:outline-none focus:border-accent-teal focus:ring-1 focus:ring-accent-teal transition-all shadow-inner font-medium text-sm text-center"
                         />
                     </div>
                 </div>
@@ -148,7 +141,7 @@ export default function SearchForm() {
                             onChange={handleFromChange}
                             onFocus={() => from && setFromSuggestions(CITIES.filter(c => c.toLowerCase().includes(from.toLowerCase())))}
                             onBlur={() => setTimeout(() => setShowFromSuggestions(false), 200)}
-                            className="w-full bg-primary-bg border-2 border-border-light text-text-primary rounded-[14px] pl-12 pr-4 py-4 md:py-5 text-lg font-bold focus:outline-none focus:border-accent-orange focus:bg-primary-bg shadow-inner transition-all placeholder:font-medium placeholder:text-text-muted"
+                            className="w-full bg-card-bg border-2 border-border-light text-text-primary rounded-[14px] pl-12 pr-4 py-4 md:py-5 text-lg font-bold focus:outline-none focus:border-accent-orange focus:bg-card-bg shadow-inner transition-all placeholder:font-medium placeholder:text-text-muted"
                         />
                         {showFromSuggestions && fromSuggestions.length > 0 && (
                             <ul className="absolute z-50 mt-2 w-full glass-card border-border-light rounded-xl overflow-hidden py-2 animate-fade-in shadow-2xl">
@@ -156,7 +149,7 @@ export default function SearchForm() {
                                     <li
                                         key={city}
                                         onClick={() => { setFrom(city); setShowFromSuggestions(false); }}
-                                        className="px-5 py-3 hover:bg-accent-orange/20 cursor-pointer text-white font-medium transition-colors border-l-2 border-transparent hover:border-accent-orange"
+                                        className="px-5 py-3 hover:bg-accent-orange/20 cursor-pointer text-text-primary font-medium transition-colors border-l-2 border-transparent hover:border-accent-orange"
                                     >
                                         {city}
                                     </li>
@@ -189,7 +182,7 @@ export default function SearchForm() {
                             onChange={handleToChange}
                             onFocus={() => to && setToSuggestions(CITIES.filter(c => c.toLowerCase().includes(to.toLowerCase()) && c !== from))}
                             onBlur={() => setTimeout(() => setShowToSuggestions(false), 200)}
-                            className="w-full bg-primary-bg border-2 border-border-light text-text-primary rounded-[14px] pl-12 pr-4 py-4 md:py-5 text-lg font-bold focus:outline-none focus:border-accent-teal focus:bg-primary-bg shadow-inner transition-all placeholder:font-medium placeholder:text-text-muted"
+                            className="w-full bg-card-bg border-2 border-border-light text-text-primary rounded-[14px] pl-12 pr-4 py-4 md:py-5 text-lg font-bold focus:outline-none focus:border-accent-teal focus:bg-card-bg shadow-inner transition-all placeholder:font-medium placeholder:text-text-muted"
                         />
                         {showToSuggestions && toSuggestions.length > 0 && (
                             <ul className="absolute z-50 mt-2 w-full glass-card border-border-light rounded-xl overflow-hidden py-2 animate-fade-in shadow-2xl">
@@ -197,7 +190,7 @@ export default function SearchForm() {
                                     <li
                                         key={city}
                                         onClick={() => { setTo(city); setShowToSuggestions(false); }}
-                                        className="px-5 py-3 hover:bg-accent-teal/20 cursor-pointer text-white font-medium transition-colors border-l-2 border-transparent hover:border-accent-teal"
+                                        className="px-5 py-3 hover:bg-accent-teal/20 cursor-pointer text-text-primary font-medium transition-colors border-l-2 border-transparent hover:border-accent-teal"
                                     >
                                         {city}
                                     </li>
