@@ -1,8 +1,8 @@
-import { Router } from 'express';
-import { getHotels } from '../controllers/hotelController.js';
+import express from "express";
+import { getHotels } from "../controllers/hotelController.js";
 
-const router = Router();
+const router = express.Router();
 
-router.get('/', getHotels);
+router.route("/").get(getHotels);
 
 export default router;

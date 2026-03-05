@@ -29,7 +29,19 @@ export default function SharedTrip() {
         );
     }
 
-    const { searchParams, selectedRoutes, selectedHotels, nights, derived } = tripData;
+    const { searchParams, selectedRoutes, selectedHotels, nights, derived } = useMemo(() => {
+        if (!tripData) return {};
+        if (tripData.sp) {
+            return {
+                searchParams: tripData.sp,
+                selectedRoutes: tripData.r ?? [],
+                selectedHotels: tripData.h ?? [],
+                nights: tripData.n ?? 1,
+                derived: { grandTotal: tripData.t ?? 0 }
+            };
+        }
+        return tripData;
+    }, [tripData]);
 
     return (
         <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-20 fade-in">

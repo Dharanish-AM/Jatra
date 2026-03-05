@@ -26,33 +26,27 @@ export default function SearchForm() {
     const [showToSuggestions, setShowToSuggestions] = useState(false);
 
     useEffect(() => {
+        /* eslint-disable react-hooks/set-state-in-effect */
         setFrom(searchParams.from || '');
         setTo(searchParams.to || '');
         setDate(searchParams.date || today);
         setPassengers(searchParams.passengers || 1);
         setType(searchParams.type || 'Both');
+        /* eslint-enable react-hooks/set-state-in-effect */
     }, [searchParams, today]);
 
     const handleFromChange = (e) => {
         const val = e.target.value;
         setFrom(val);
-        if (val.length > 0) {
-            setFromSuggestions(CITIES.filter(c => c.toLowerCase().includes(val.toLowerCase())));
-            setShowFromSuggestions(true);
-        } else {
-            setShowFromSuggestions(false);
-        }
+        setFromSuggestions(val ? CITIES.filter(c => c.toLowerCase().includes(val.toLowerCase())) : CITIES);
+        setShowFromSuggestions(true);
     };
 
     const handleToChange = (e) => {
         const val = e.target.value;
         setTo(val);
-        if (val.length > 0) {
-            setToSuggestions(CITIES.filter(c => c.toLowerCase().includes(val.toLowerCase()) && c !== from));
-            setShowToSuggestions(true);
-        } else {
-            setShowToSuggestions(false);
-        }
+        setToSuggestions(val ? CITIES.filter(c => c.toLowerCase().includes(val.toLowerCase()) && c !== from) : CITIES.filter(c => c !== from));
+        setShowToSuggestions(true);
     };
 
     const handleSwap = () => {
@@ -148,7 +142,10 @@ export default function SearchForm() {
                             placeholder="Leaving from"
                             value={from}
                             onChange={handleFromChange}
-                            onFocus={() => from && setFromSuggestions(CITIES.filter(c => c.toLowerCase().includes(from.toLowerCase())))}
+                            onFocus={() => {
+                                setFromSuggestions(from ? CITIES.filter(c => c.toLowerCase().includes(from.toLowerCase())) : CITIES);
+                                setShowFromSuggestions(true);
+                            }}
                             onBlur={() => setTimeout(() => setShowFromSuggestions(false), 200)}
                             className="w-full bg-card-bg border-2 border-border-light text-text-primary rounded-[14px] pl-12 pr-4 py-4 md:py-5 text-lg font-bold focus:outline-none focus:border-accent-orange focus:bg-card-bg shadow-inner transition-all placeholder:font-medium placeholder:text-text-muted"
                         />
@@ -189,7 +186,10 @@ export default function SearchForm() {
                             placeholder="Going to"
                             value={to}
                             onChange={handleToChange}
-                            onFocus={() => to && setToSuggestions(CITIES.filter(c => c.toLowerCase().includes(to.toLowerCase()) && c !== from))}
+                            onFocus={() => {
+                                setToSuggestions(to ? CITIES.filter(c => c.toLowerCase().includes(to.toLowerCase()) && c !== from) : CITIES.filter(c => c !== from));
+                                setShowToSuggestions(true);
+                            }}
                             onBlur={() => setTimeout(() => setShowToSuggestions(false), 200)}
                             className="w-full bg-card-bg border-2 border-border-light text-text-primary rounded-[14px] pl-12 pr-4 py-4 md:py-5 text-lg font-bold focus:outline-none focus:border-accent-teal focus:bg-card-bg shadow-inner transition-all placeholder:font-medium placeholder:text-text-muted"
                         />

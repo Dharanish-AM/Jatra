@@ -8,10 +8,7 @@
     "reviewCount": 230,
     "pricePerNight": 950,
     "distanceFromStation": "1.5 km",
-    "amenities": [
-      "WiFi",
-      "AC"
-    ],
+    "amenities": ["WiFi", "AC"],
     "images": [
       "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800&q=80"
     ],
@@ -28,12 +25,7 @@
     "reviewCount": 850,
     "pricePerNight": 3200,
     "distanceFromStation": "2.5 km",
-    "amenities": [
-      "WiFi",
-      "AC",
-      "Breakfast",
-      "Pool"
-    ],
+    "amenities": ["WiFi", "AC", "Breakfast", "Pool"],
     "images": [
       "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&q=80"
     ],
@@ -50,13 +42,7 @@
     "reviewCount": 420,
     "pricePerNight": 18500,
     "distanceFromStation": "1.0 km",
-    "amenities": [
-      "WiFi",
-      "AC",
-      "Pool",
-      "Spa",
-      "Breakfast"
-    ],
+    "amenities": ["WiFi", "AC", "Pool", "Spa", "Breakfast"],
     "images": [
       "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80"
     ],
@@ -73,10 +59,7 @@
     "reviewCount": 350,
     "pricePerNight": 1400,
     "distanceFromStation": "4.0 km",
-    "amenities": [
-      "WiFi",
-      "AC"
-    ],
+    "amenities": ["WiFi", "AC"],
     "images": [
       "https://images.unsplash.com/photo-1540541338287-41700207dee6?w=800&q=80"
     ],
@@ -93,13 +76,7 @@
     "reviewCount": 1120,
     "pricePerNight": 3800,
     "distanceFromStation": "5.5 km",
-    "amenities": [
-      "WiFi",
-      "AC",
-      "Pool",
-      "Breakfast",
-      "Gym"
-    ],
+    "amenities": ["WiFi", "AC", "Pool", "Breakfast", "Gym"],
     "images": [
       "https://images.unsplash.com/photo-1522798514-97ceb8c4f1c8?w=800&q=80"
     ],
@@ -116,13 +93,7 @@
     "reviewCount": 2100,
     "pricePerNight": 35000,
     "distanceFromStation": "6.0 km",
-    "amenities": [
-      "WiFi",
-      "AC",
-      "Pool",
-      "Spa",
-      "Breakfast"
-    ],
+    "amenities": ["WiFi", "AC", "Pool", "Spa", "Breakfast"],
     "images": [
       "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?w=800&q=80"
     ],
@@ -139,10 +110,7 @@
     "reviewCount": 540,
     "pricePerNight": 800,
     "distanceFromStation": "3.5 km",
-    "amenities": [
-      "WiFi",
-      "AC"
-    ],
+    "amenities": ["WiFi", "AC"],
     "images": [
       "https://images.unsplash.com/photo-1542314831-c6a4d14d8c85?w=800&q=80"
     ],
@@ -159,12 +127,7 @@
     "reviewCount": 980,
     "pricePerNight": 3500,
     "distanceFromStation": "1.5 km",
-    "amenities": [
-      "WiFi",
-      "AC",
-      "Breakfast",
-      "Pool"
-    ],
+    "amenities": ["WiFi", "AC", "Breakfast", "Pool"],
     "images": [
       "https://images.unsplash.com/photo-1551882547-ff40c0d5e9af?w=800&q=80"
     ],
@@ -181,13 +144,7 @@
     "reviewCount": 1500,
     "pricePerNight": 9500,
     "distanceFromStation": "4.2 km",
-    "amenities": [
-      "WiFi",
-      "AC",
-      "Pool",
-      "Spa",
-      "Breakfast"
-    ],
+    "amenities": ["WiFi", "AC", "Pool", "Spa", "Breakfast"],
     "images": [
       "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=800&q=80"
     ],
@@ -204,11 +161,7 @@
     "reviewCount": 310,
     "pricePerNight": 1200,
     "distanceFromStation": "3.0 km",
-    "amenities": [
-      "WiFi",
-      "AC",
-      "Breakfast"
-    ],
+    "amenities": ["WiFi", "AC", "Breakfast"],
     "images": [
       "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800&q=80"
     ],
@@ -225,12 +178,7 @@
     "reviewCount": 780,
     "pricePerNight": 3200,
     "distanceFromStation": "4.5 km",
-    "amenities": [
-      "WiFi",
-      "AC",
-      "Breakfast",
-      "Gym"
-    ],
+    "amenities": ["WiFi", "AC", "Breakfast", "Gym"],
     "images": [
       "https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=800&q=80"
     ],
@@ -247,13 +195,7 @@
     "reviewCount": 3200,
     "pricePerNight": 12000,
     "distanceFromStation": "8.0 km",
-    "amenities": [
-      "WiFi",
-      "AC",
-      "Pool",
-      "Spa",
-      "Breakfast"
-    ],
+    "amenities": ["WiFi", "AC", "Pool", "Spa", "Breakfast"],
     "images": [
       "https://images.unsplash.com/photo-1590490359683-658d3d23f972?w=800&q=80"
     ],
@@ -270,10 +212,7 @@
     "reviewCount": 240,
     "pricePerNight": 1100,
     "distanceFromStation": "0.5 km",
-    "amenities": [
-      "WiFi",
-      "AC"
-    ],
+    "amenities": ["WiFi", "AC"],
     "images": [
       "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800&q=80"
     ],
@@ -290,12 +229,7 @@
     "reviewCount": 650,
     "pricePerNight": 3500,
     "distanceFromStation": "6.0 km",
-    "amenities": [
-      "WiFi",
-      "AC",
-      "Pool",
-      "Breakfast"
-    ],
+    "amenities": ["WiFi", "AC", "Pool", "Breakfast"],
     "images": [
       "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&q=80"
     ],
@@ -312,18 +246,182 @@
     "reviewCount": 1100,
     "pricePerNight": 7500,
     "distanceFromStation": "4.5 km",
-    "amenities": [
-      "WiFi",
-      "AC",
-      "Pool",
-      "Spa",
-      "Breakfast"
-    ],
+    "amenities": ["WiFi", "AC", "Pool", "Spa", "Breakfast"],
     "images": [
       "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80"
     ],
     "tag": "LUXURY",
     "affiliateUrl": "#",
     "description": "Resort-style luxury property set amidst lush greenery and a tranquil lagoon."
+  },
+  {
+    "id": "h16",
+    "city": "Varanasi",
+    "name": "BrijRama Palace",
+    "stars": 5,
+    "rating": 4.8,
+    "reviewCount": 650,
+    "pricePerNight": 22000,
+    "distanceFromStation": "4.0 km",
+    "amenities": ["WiFi", "AC", "Spa", "Breakfast"],
+    "images": [
+      "https://images.unsplash.com/photo-1542314831-c6a4d14d8c85?w=800&q=80"
+    ],
+    "tag": "LUXURY",
+    "affiliateUrl": "#",
+    "description": "A luxury heritage hotel located by the Ganges with stunning views and royal hospitality."
+  },
+  {
+    "id": "h17",
+    "city": "Agra",
+    "name": "ITC Mughal",
+    "stars": 5,
+    "rating": 4.6,
+    "reviewCount": 1850,
+    "pricePerNight": 9500,
+    "distanceFromStation": "4.5 km",
+    "amenities": ["WiFi", "AC", "Pool", "Spa", "Breakfast", "Gym"],
+    "images": [
+      "https://images.unsplash.com/photo-1551882547-ff40c0d5e9af?w=800&q=80"
+    ],
+    "tag": "RECOMMENDED",
+    "affiliateUrl": "#",
+    "description": "A sprawling luxury resort inspired by Mughal architecture, near the Taj Mahal."
+  },
+  {
+    "id": "h18",
+    "city": "Delhi",
+    "name": "The Leela Palace",
+    "stars": 5,
+    "rating": 4.9,
+    "reviewCount": 3100,
+    "pricePerNight": 25000,
+    "distanceFromStation": "8.5 km",
+    "amenities": ["WiFi", "AC", "Pool", "Spa", "Breakfast", "Gym"],
+    "images": [
+      "https://images.unsplash.com/photo-1542314831-c6a4d14d8c85?w=800&q=80"
+    ],
+    "tag": "LUXURY",
+    "affiliateUrl": "#",
+    "description": "Exquisite luxury property showcasing modern Indian hospitality in Diplomatic Enclave."
+  },
+  {
+    "id": "h19",
+    "city": "Delhi",
+    "name": "Hotel Suncity",
+    "stars": 3,
+    "rating": 3.8,
+    "reviewCount": 420,
+    "pricePerNight": 1100,
+    "distanceFromStation": "1.2 km",
+    "amenities": ["WiFi", "AC", "Breakfast"],
+    "images": [
+      "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800&q=80"
+    ],
+    "tag": "BUDGET",
+    "affiliateUrl": "#",
+    "description": "No-frills budget stay very close to the central railway station."
+  },
+  {
+    "id": "h20",
+    "city": "Mumbai",
+    "name": "The Taj Mahal Palace",
+    "stars": 5,
+    "rating": 5.0,
+    "reviewCount": 8500,
+    "pricePerNight": 32000,
+    "distanceFromStation": "3.5 km",
+    "amenities": ["WiFi", "AC", "Pool", "Spa", "Breakfast", "Gym", "Sea View"],
+    "images": [
+      "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80"
+    ],
+    "tag": "LUXURY",
+    "affiliateUrl": "#",
+    "description": "Iconic luxury hotel overlooking the Gateway of India and the Arabian Sea."
+  },
+  {
+    "id": "h21",
+    "city": "Mumbai",
+    "name": "Trident Nariman Point",
+    "stars": 4,
+    "rating": 4.6,
+    "reviewCount": 2200,
+    "pricePerNight": 11000,
+    "distanceFromStation": "4.2 km",
+    "amenities": ["WiFi", "AC", "Pool", "Gym", "Sea View"],
+    "images": [
+      "https://images.unsplash.com/photo-1551882547-ff40c0d5e9af?w=800&q=80"
+    ],
+    "tag": "RECOMMENDED",
+    "affiliateUrl": "#",
+    "description": "Business hotel with striking ocean views and refined rooms."
+  },
+  {
+    "id": "h22",
+    "city": "Kolkata",
+    "name": "ITC Sonar",
+    "stars": 5,
+    "rating": 4.8,
+    "reviewCount": 2750,
+    "pricePerNight": 14000,
+    "distanceFromStation": "11.0 km",
+    "amenities": ["WiFi", "AC", "Pool", "Spa", "Breakfast", "Gardens"],
+    "images": [
+      "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?w=800&q=80"
+    ],
+    "tag": "RECOMMENDED",
+    "affiliateUrl": "#",
+    "description": "A luxury business resort nestled in nature with distinct architecture."
+  },
+  {
+    "id": "h23",
+    "city": "Kolkata",
+    "name": "Backpackers Park",
+    "stars": 2,
+    "rating": 4.2,
+    "reviewCount": 185,
+    "pricePerNight": 750,
+    "distanceFromStation": "2.8 km",
+    "amenities": ["WiFi", "AC", "Locker"],
+    "images": [
+      "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800&q=80"
+    ],
+    "tag": "BUDGET",
+    "affiliateUrl": "#",
+    "description": "Vibrant and economical hostel perfect for solo travelers."
+  },
+  {
+    "id": "h24",
+    "city": "Goa",
+    "name": "Taj Exotica Resort & Spa",
+    "stars": 5,
+    "rating": 4.9,
+    "reviewCount": 4100,
+    "pricePerNight": 28000,
+    "distanceFromStation": "15.0 km",
+    "amenities": ["WiFi", "AC", "Private Beach", "Pool", "Spa", "Breakfast"],
+    "images": [
+      "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&q=80"
+    ],
+    "tag": "LUXURY",
+    "affiliateUrl": "#",
+    "description": "Mediterranean-style luxury resort with a private beach in South Goa."
+  },
+  {
+    "id": "h25",
+    "city": "Goa",
+    "name": "Zostel Goa",
+    "stars": 3,
+    "rating": 4.4,
+    "reviewCount": 890,
+    "pricePerNight": 1200,
+    "distanceFromStation": "8.0 km",
+    "amenities": ["WiFi", "AC", "Pool", "Bar"],
+    "images": [
+      "https://images.unsplash.com/photo-1540541338287-41700207dee6?w=800&q=80"
+    ],
+    "tag": "BUDGET",
+    "affiliateUrl": "#",
+    "description": "Popular hostel with a huge pool and daily social events."
   }
 ]

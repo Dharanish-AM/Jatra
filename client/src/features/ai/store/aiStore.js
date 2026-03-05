@@ -5,7 +5,7 @@ export const useAIStore = create(
   persist(
     (set) => ({
       aiPickedRouteId: null,
-      apiKey: '',
+      apiKey: import.meta.env.VITE_GROQ_API_KEY || '',
       setAiPick: (routeId) => set({ aiPickedRouteId: routeId }),
       setApiKey: (apiKey) => set({ apiKey }),
     }),

@@ -21,35 +21,46 @@ export function parseAIPickTag(text) {
   if (!pickMatch) return { pickedRouteId: null, cleanText: text.trim() };
   return {
     pickedRouteId: pickMatch[1].trim(),
-    cleanText: text.replace(/\[AI_PICK:\s*([^\]]+)\]/i, '').trim(),
+    cleanText: text.replace(/\[AI_PICK:\s*([^\]]+)\]/gi, '').trim(),
   };
 }
 
 export async function getTravelRecommendation(request) {
   const { apiKey, message, searchParams, routes, hotels } = request;
 
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
+  const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerously-allow-browser': 'true',
+      Authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
-      model: 'claude-3-5-sonnet-20241022',
-      max_tokens: 420,
-      system: buildSystemPrompt({ searchParams, routes, hotels }),
-      messages: [{ role: 'user', content: message }],
+      model: 'llama-3.3-70b-versatile',
+      max_tokens: 800,
+      messages: [
+        { role: 'system', content: buildSystemPrompt({ searchParams, routes, hotels }) },
+        { role: 'user', content: message },
+      ],
     }),
   });
 
   if (!response.ok) {
-    throw new Error(`Anthropic API Error: ${response.status}`);
+    const errorText = await response.text();
+    console.error('Groq API Error Details:', errorText);
+    let errorMessage = `Groq API Error: ${response.status}`;
+    try {
+      const errorJson = JSON.parse(errorText);
+      if (errorJson.error && errorJson.error.message) {
+        errorMessage += ` - ${errorJson.error.message}`;
+      }
+    } catch {
+      // Ignore parse error and keep default errorMessage
+    }
+    throw new Error(errorMessage);
   }
 
   const data = await response.json();
-  const text = data?.content?.[0]?.text ?? '';
+  const text = data?.choices?.[0]?.message?.content ?? '';
   const parsed = parseAIPickTag(text);
 
   return {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { QRCodeSVG } from 'qrcode.react';
+import QRCode from 'react-qr-code';
 import { X, Copy, Check, Download, Share2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useTrip } from '../context/TripContext';
@@ -9,15 +9,23 @@ export default function ShareModal({ onClose }) {
     const { searchParams, selectedRoutes, selectedHotels, nights, derived } = useTrip();
     const [copied, setCopied] = useState(false);
 
-    const tripData = {
-        searchParams,
-        selectedRoutes,
-        selectedHotels,
-        nights,
-        derived
+    const slimRoutes = selectedRoutes.map(r => ({
+        id: r.id, from: r.from, to: r.to, fare: r.fare,
+        name: r.name, type: r.type, operator: r.operator,
+        departure: r.departure, arrival: r.arrival, duration: r.duration
+    }));
+    const slimHotels = selectedHotels.map(h => ({
+        id: h.id, city: h.city, name: h.name,
+        stars: h.stars, pricePerNight: h.pricePerNight
+    }));
+    const slimData = {
+        sp: { from: searchParams.from, to: searchParams.to, date: searchParams.date, passengers: searchParams.passengers, type: searchParams.type },
+        r: slimRoutes,
+        h: slimHotels,
+        n: nights,
+        t: derived.grandTotal
     };
-
-    const encodedData = encodeItinerary(tripData);
+    const encodedData = encodeItinerary(slimData);
     const shareUrl = `${window.location.origin}/trip?data=${encodedData}`;
 
     const copyToClipboard = () => {
@@ -99,12 +107,13 @@ export default function ShareModal({ onClose }) {
 
                     <div className="flex flex-col items-center md:w-1/3">
                         <div className="bg-white p-4 rounded-2xl shadow-[0_10px_30px_rgba(255,255,255,0.1)] mb-4 hover:scale-105 transition-transform duration-300">
-                            <QRCodeSVG
+                            <QRCode
                                 value={shareUrl}
-                                size={160}
+                                size={180}
                                 fgColor="#09090b"
-                                level="Q"
-                                includeMargin={false}
+                                bgColor="#ffffff"
+                                level="L"
+                                style={{ height: 'auto', maxWidth: '100%', width: '100%' }}
                             />
                         </div>
                         <p className="text-[11px] text-text-muted font-black tracking-widest uppercase mb-6 text-center">Scan to open on mobile</p>
