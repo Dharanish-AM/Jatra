@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, Navigate } from 'react-router-dom';
 import ProtectedRoute from "../../components/ProtectedRoute";
 
 const Signup = React.lazy(() => import('../../pages/Signup'));
@@ -46,6 +46,7 @@ export default function AppRouter() {
               <Itinerary />
             </ProtectedRoute>
         } />
+        <Route path="/iternary" element={<Navigate to="/itinerary" replace />} />
         <Route path="/trip" element={<SharedTrip />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

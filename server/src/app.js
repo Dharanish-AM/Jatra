@@ -5,6 +5,7 @@ import morgan from "morgan";
 import routeRoutes from "./routes/routeRoutes.js";
 import hotelRoutes from "./routes/hotelRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import aiRoutes from "./routes/aiRoutes.js";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler.js";
 
 const clientOrigin = (
@@ -30,6 +31,7 @@ app.get("/api/health", (_req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/routes", routeRoutes);
 app.use("/api/hotels", hotelRoutes);
+app.use("/api/ai", aiRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

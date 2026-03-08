@@ -6,7 +6,7 @@ import { useTrip } from '../context/TripContext';
 import { encodeItinerary } from '../utils/itineraryEncoder';
 
 export default function ShareModal({ onClose }) {
-    const { searchParams, selectedRoutes, selectedHotels, nights, derived } = useTrip();
+    const { searchParams, selectedRoutes, selectedHotels, nights, derived, itineraryDetails } = useTrip();
     const [copied, setCopied] = useState(false);
 
     const slimRoutes = selectedRoutes.map(r => ({
@@ -23,7 +23,12 @@ export default function ShareModal({ onClose }) {
         r: slimRoutes,
         h: slimHotels,
         n: nights,
-        t: derived.grandTotal
+        t: derived.grandTotal,
+        d: {
+            tripTitle: itineraryDetails.tripTitle,
+            tripNotes: itineraryDetails.tripNotes,
+            dayPlans: itineraryDetails.dayPlans,
+        },
     };
     const encodedData = encodeItinerary(slimData);
     const shareUrl = `${window.location.origin}/trip?data=${encodedData}`;
@@ -78,6 +83,32 @@ export default function ShareModal({ onClose }) {
             });
         }
 
+        if (itineraryDetails.tripNotes || itineraryDetails.dayPlans.length > 0) {
+            content += `Detailed Plan:\n`;
+            if (itineraryDetails.tripNotes) {
+                content += `Notes: ${itineraryDetails.tripNotes}\n\n`;
+            }
+
+            itineraryDetails.dayPlans
+                .slice()
+                .sort((a, b) => a.day - b.day)
+                .forEach((plan) => {
+                    content += `Day ${plan.day}: ${plan.title || 'Plan'}\n`;
+                    if (plan.dayNotes) {
+                        content += `Note: ${plan.dayNotes}\n`;
+                    }
+                    if (plan.estimatedBudget) {
+                        content += `Budget: ₹${plan.estimatedBudget}\n`;
+                    }
+                    if (plan.activities?.length > 0) {
+                        plan.activities.forEach((activity) => {
+                            content += `- ${activity}\n`;
+                        });
+                    }
+                    content += `\n`;
+                });
+        }
+
         content += `=====================================\n`;
         content += `Estimated Total: ₹${derived.grandTotal}\n`;
         content += `Link: ${shareUrl}\n`;
@@ -89,6 +120,94 @@ export default function ShareModal({ onClose }) {
         a.download = `Jatra_Itinerary_${searchParams.from}_${searchParams.to}.txt`;
         a.click();
         URL.revokeObjectURL(url);
+    };
+
+    const escapeHtml = (value) =>
+        String(value)
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#39;');
+
+    const downloadPdf = () => {
+        const sortedDayPlans = itineraryDetails.dayPlans.slice().sort((a, b) => a.day - b.day);
+
+        const html = `
+            <html>
+                <head>
+                    <title>Jatra Itinerary PDF</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; color: #0f172a; padding: 24px; }
+                        h1, h2, h3 { margin: 0 0 8px; }
+                        .muted { color: #475569; }
+                        .section { margin-top: 24px; }
+                        .card { border: 1px solid #cbd5e1; border-radius: 10px; padding: 12px; margin-bottom: 12px; }
+                        ul { margin: 8px 0 0 18px; }
+                    </style>
+                </head>
+                <body>
+                    <h1>${escapeHtml(itineraryDetails.tripTitle || `Jatra Trip: ${searchParams.from} to ${searchParams.to}`)}</h1>
+                    <p class="muted">From ${escapeHtml(searchParams.from)} to ${escapeHtml(searchParams.to)} | ${escapeHtml(searchParams.date || 'Date TBD')} | ${escapeHtml(searchParams.passengers)} passenger(s)</p>
+                    <h2>Total Estimate: Rs.${escapeHtml(derived.grandTotal)}</h2>
+
+                    <div class="section">
+                        <h3>Transport Legs</h3>
+                        ${selectedRoutes
+                            .map((route, index) => `
+                                <div class="card">
+                                    <strong>Leg ${index + 1}: ${escapeHtml(route.from)} to ${escapeHtml(route.to)}</strong><br/>
+                                    ${escapeHtml(route.operator)} ${escapeHtml(route.name)} (${escapeHtml(route.type)})<br/>
+                                    ${escapeHtml(route.departure)} - ${escapeHtml(route.arrival)} (${escapeHtml(route.duration)})<br/>
+                                    Fare per passenger: Rs.${escapeHtml(route.fare)}
+                                </div>
+                            `)
+                            .join('')}
+                    </div>
+
+                    <div class="section">
+                        <h3>Hotels</h3>
+                        ${selectedHotels
+                            .map((hotel) => `
+                                <div class="card">
+                                    <strong>${escapeHtml(hotel.name)}</strong> (${escapeHtml(hotel.city)})<br/>
+                                    ${escapeHtml(hotel.stars)} star | Rs.${escapeHtml(hotel.pricePerNight)} per night x ${escapeHtml(nights)} night(s)
+                                </div>
+                            `)
+                            .join('')}
+                    </div>
+
+                    ${itineraryDetails.tripNotes || sortedDayPlans.length > 0 ? `
+                        <div class="section">
+                            <h3>Detailed Plan</h3>
+                            ${itineraryDetails.tripNotes ? `<p>${escapeHtml(itineraryDetails.tripNotes)}</p>` : ''}
+                            ${sortedDayPlans
+                                .map((plan) => `
+                                    <div class="card">
+                                        <strong>Day ${escapeHtml(plan.day)}: ${escapeHtml(plan.title || 'Plan')}</strong><br/>
+                                        ${plan.dayNotes ? `Note: ${escapeHtml(plan.dayNotes)}<br/>` : ''}
+                                        ${plan.estimatedBudget ? `Budget: Rs.${escapeHtml(plan.estimatedBudget)}<br/>` : ''}
+                                        ${plan.activities?.length > 0 ? `<ul>${plan.activities.map((activity) => `<li>${escapeHtml(activity)}</li>`).join('')}</ul>` : '<p class="muted">No activities added.</p>'}
+                                    </div>
+                                `)
+                                .join('')}
+                        </div>
+                    ` : ''}
+                </body>
+            </html>
+        `;
+
+        const printWindow = window.open('', '_blank', 'width=900,height=700');
+        if (!printWindow) {
+            toast.error('Popup blocked. Please allow popups to export PDF.');
+            return;
+        }
+
+        printWindow.document.open();
+        printWindow.document.write(html);
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
     };
 
     return (
@@ -171,6 +290,13 @@ export default function ShareModal({ onClose }) {
                                 className="w-full bg-primary-bg/50 border border-border-light text-white hover:text-accent-orange font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all hover:border-accent-orange/50 hover-lift group shadow-sm"
                             >
                                 <Download className="w-5 h-5 text-text-muted group-hover:text-accent-orange transition-colors" /> Download as Text
+                            </button>
+
+                            <button
+                                onClick={downloadPdf}
+                                className="w-full bg-primary-bg/50 border border-border-light text-white hover:text-accent-orange font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all hover:border-accent-orange/50 hover-lift group shadow-sm"
+                            >
+                                <Download className="w-5 h-5 text-text-muted group-hover:text-accent-orange transition-colors" /> Download as PDF
                             </button>
                         </div>
 

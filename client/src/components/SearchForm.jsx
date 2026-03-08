@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTrip } from '../context/TripContext';
 import { MapPin, Calendar, Users, Bus, Train, ArrowRightLeft } from 'lucide-react';
@@ -8,6 +8,12 @@ const CITIES = [
     'Delhi', 'Varanasi', 'Agra', 'Mumbai', 'Pune',
     'Bengaluru', 'Chennai', 'Kolkata', 'Bhubaneswar', 'Goa'
 ];
+
+function clampPassengers(value) {
+    const parsed = Number.parseInt(value, 10);
+    if (!Number.isFinite(parsed)) return 1;
+    return Math.min(9, Math.max(1, parsed));
+}
 
 export default function SearchForm() {
     const { searchParams, actions } = useTrip();
@@ -25,28 +31,26 @@ export default function SearchForm() {
     const [showFromSuggestions, setShowFromSuggestions] = useState(false);
     const [showToSuggestions, setShowToSuggestions] = useState(false);
 
-    useEffect(() => {
-        /* eslint-disable react-hooks/set-state-in-effect */
-        setFrom(searchParams.from || '');
-        setTo(searchParams.to || '');
-        setDate(searchParams.date || today);
-        setPassengers(searchParams.passengers || 1);
-        setType(searchParams.type || 'Both');
-        /* eslint-enable react-hooks/set-state-in-effect */
-    }, [searchParams, today]);
-
     const handleFromChange = (e) => {
         const val = e.target.value;
         setFrom(val);
-        setFromSuggestions(val ? CITIES.filter(c => c.toLowerCase().includes(val.toLowerCase())) : CITIES);
-        setShowFromSuggestions(true);
+        if (val.length > 0) {
+            setFromSuggestions(CITIES.filter(c => c.toLowerCase().includes(val.toLowerCase())));
+            setShowFromSuggestions(true);
+        } else {
+            setShowFromSuggestions(false);
+        }
     };
 
     const handleToChange = (e) => {
         const val = e.target.value;
         setTo(val);
-        setToSuggestions(val ? CITIES.filter(c => c.toLowerCase().includes(val.toLowerCase()) && c !== from) : CITIES.filter(c => c !== from));
-        setShowToSuggestions(true);
+        if (val.length > 0) {
+            setToSuggestions(CITIES.filter(c => c.toLowerCase().includes(val.toLowerCase()) && c !== from));
+            setShowToSuggestions(true);
+        } else {
+            setShowToSuggestions(false);
+        }
     };
 
     const handleSwap = () => {
@@ -70,7 +74,9 @@ export default function SearchForm() {
             return;
         }
 
-        actions.setSearch({ from, to, date, passengers, type });
+        const safePassengers = clampPassengers(passengers);
+        actions.setSearch({ from, to, date, passengers: safePassengers, type });
+        actions.addRecentSearch({ from, to, date, passengers: safePassengers, type });
         navigate('/results');
     };
 
@@ -123,7 +129,7 @@ export default function SearchForm() {
                             min="1"
                             max="9"
                             value={passengers}
-                            onChange={(e) => setPassengers(parseInt(e.target.value))}
+                            onChange={(e) => setPassengers(clampPassengers(e.target.value))}
                             className="w-full bg-card-bg border border-border-light text-text-primary rounded-xl pl-12 pr-4 py-3.5 focus:outline-none focus:border-accent-teal focus:ring-1 focus:ring-accent-teal transition-all shadow-inner font-medium text-sm text-center"
                         />
                     </div>
@@ -142,10 +148,7 @@ export default function SearchForm() {
                             placeholder="Leaving from"
                             value={from}
                             onChange={handleFromChange}
-                            onFocus={() => {
-                                setFromSuggestions(from ? CITIES.filter(c => c.toLowerCase().includes(from.toLowerCase())) : CITIES);
-                                setShowFromSuggestions(true);
-                            }}
+                            onFocus={() => from && setFromSuggestions(CITIES.filter(c => c.toLowerCase().includes(from.toLowerCase())))}
                             onBlur={() => setTimeout(() => setShowFromSuggestions(false), 200)}
                             className="w-full bg-card-bg border-2 border-border-light text-text-primary rounded-[14px] pl-12 pr-4 py-4 md:py-5 text-lg font-bold focus:outline-none focus:border-accent-orange focus:bg-card-bg shadow-inner transition-all placeholder:font-medium placeholder:text-text-muted"
                         />
@@ -186,10 +189,7 @@ export default function SearchForm() {
                             placeholder="Going to"
                             value={to}
                             onChange={handleToChange}
-                            onFocus={() => {
-                                setToSuggestions(to ? CITIES.filter(c => c.toLowerCase().includes(to.toLowerCase()) && c !== from) : CITIES.filter(c => c !== from));
-                                setShowToSuggestions(true);
-                            }}
+                            onFocus={() => to && setToSuggestions(CITIES.filter(c => c.toLowerCase().includes(to.toLowerCase()) && c !== from))}
                             onBlur={() => setTimeout(() => setShowToSuggestions(false), 200)}
                             className="w-full bg-card-bg border-2 border-border-light text-text-primary rounded-[14px] pl-12 pr-4 py-4 md:py-5 text-lg font-bold focus:outline-none focus:border-accent-teal focus:bg-card-bg shadow-inner transition-all placeholder:font-medium placeholder:text-text-muted"
                         />

@@ -3,6 +3,8 @@ import { SlidersHorizontal, X } from 'lucide-react';
 
 function FilterPanel({ filters, setFilters, onClose }) {
 
+    const maxDurationHours = Math.floor((filters.maxDuration ?? 24 * 60) / 60);
+
     const handleTypeChange = (type) => {
         setFilters(prev => {
             const active = prev.types.includes(type);
@@ -141,10 +143,59 @@ function FilterPanel({ filters, setFilters, onClose }) {
                         </div>
                     </div>
                 </div>
+
+                <div>
+                    <div className="flex justify-between items-center mb-4 px-1">
+                        <h3 className="text-xs font-black text-text-muted uppercase tracking-widest">Minimum Rating</h3>
+                        <span className="text-yellow-500 font-black text-sm bg-yellow-500/10 px-2 py-0.5 rounded border border-yellow-500/20">{(filters.minRating ?? 0).toFixed(1)}+</span>
+                    </div>
+                    <div className="px-1">
+                        <input
+                            type="range"
+                            min="0"
+                            max="5"
+                            step="0.5"
+                            value={filters.minRating ?? 0}
+                            onChange={(e) => setFilters((prev) => ({ ...prev, minRating: Number(e.target.value) || 0 }))}
+                            aria-label="Minimum rating filter"
+                            className="w-full accent-yellow-500 h-2 bg-primary-bg border border-border-light rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-yellow-500/50 transition-all"
+                        />
+                        <div className="flex justify-between mt-3 text-[10px] font-bold text-text-muted/60 uppercase tracking-wider">
+                            <span>Any</span>
+                            <span>5.0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div className="flex justify-between items-center mb-4 px-1">
+                        <h3 className="text-xs font-black text-text-muted uppercase tracking-widest">Max Duration</h3>
+                        <span className="text-accent-teal font-black text-sm bg-accent-teal/10 px-2 py-0.5 rounded border border-accent-teal/20">{maxDurationHours}h</span>
+                    </div>
+                    <div className="px-1">
+                        <input
+                            type="range"
+                            min="1"
+                            max="24"
+                            step="1"
+                            value={maxDurationHours}
+                            onChange={(e) => {
+                                const hours = Number.parseInt(e.target.value, 10) || 24;
+                                setFilters((prev) => ({ ...prev, maxDuration: hours * 60 }));
+                            }}
+                            aria-label="Maximum duration filter"
+                            className="w-full accent-accent-teal h-2 bg-primary-bg border border-border-light rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-accent-teal/50 transition-all"
+                        />
+                        <div className="flex justify-between mt-3 text-[10px] font-bold text-text-muted/60 uppercase tracking-wider">
+                            <span>1h</span>
+                            <span>24h</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <button
-                onClick={() => setFilters({ types: ['Bus', 'Train'], operators: ['Government', 'Private'], times: [], maxFare: 5000 })}
+                onClick={() => setFilters({ types: ['Bus', 'Train'], operators: ['Government', 'Private'], times: [], maxFare: 5000, minRating: 0, maxDuration: 24 * 60 })}
                 aria-label="Reset all filters"
                 className="w-full mt-8 py-3.5 text-sm font-bold text-text-muted bg-primary-bg/50 border border-border-light rounded-xl hover:text-primary-bg hover:bg-white transition-all shadow-sm hover:shadow-md"
             >

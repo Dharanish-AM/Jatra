@@ -4,10 +4,11 @@ import { Train, Bus, Building2, MapPin, Trash2, Edit2, Plus } from 'lucide-react
 import { useNavigate } from 'react-router-dom';
 
 export default function ItineraryPanel() {
-    const { searchParams, selectedRoutes, selectedHotels, actions, nights } = useTrip();
+    const { searchParams, selectedRoutes, selectedHotels, actions, nights, itineraryDetails } = useTrip();
     const navigate = useNavigate();
     const [isEditingTitle, setIsEditingTitle] = useState(false);
-    const [tripTitle, setTripTitle] = useState(`${searchParams.from} to ${searchParams.to} Trip`);
+
+    const tripTitle = itineraryDetails.tripTitle || `${searchParams.from} to ${searchParams.to} Trip`;
 
     const routeDestinations = selectedRoutes.map(r => r.to.toLowerCase());
     const unattachedHotels = selectedHotels.filter(h => !routeDestinations.includes(h.city.toLowerCase()));
@@ -19,7 +20,7 @@ export default function ItineraryPanel() {
                     <input
                         type="text"
                         value={tripTitle}
-                        onChange={(e) => setTripTitle(e.target.value)}
+                        onChange={(e) => actions.setTripTitle(e.target.value)}
                         onBlur={() => setIsEditingTitle(false)}
                         onKeyDown={(e) => e.key === 'Enter' && setIsEditingTitle(false)}
                         autoFocus

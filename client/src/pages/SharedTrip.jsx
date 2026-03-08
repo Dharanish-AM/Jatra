@@ -1,16 +1,86 @@
 import React, { useMemo } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
+import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import { decodeItinerary } from '../utils/itineraryEncoder';
 import { Plane, Train, Bus, Building2, ExternalLink } from 'lucide-react';
+import toast from 'react-hot-toast';
+import { useTrip } from '../context/TripContext';
 
 export default function SharedTrip() {
     const [searchParamsUrl] = useSearchParams();
+    const navigate = useNavigate();
+    const { actions } = useTrip();
     const dataParam = searchParamsUrl.get('data');
 
     const tripData = useMemo(() => {
         if (!dataParam) return null;
         return decodeItinerary(dataParam);
     }, [dataParam]);
+
+    const sharedState = useMemo(() => {
+        const defaultState = {
+            searchParams: { from: '', to: '', date: '', passengers: 1, type: 'Both' },
+            selectedRoutes: [],
+            selectedHotels: [],
+            nights: 1,
+            derived: { grandTotal: 0 },
+            itineraryDetails: { tripTitle: '', tripNotes: '', dayPlans: [] },
+        };
+
+        if (!tripData) return defaultState;
+
+        if (tripData.sp) {
+            return {
+                searchParams: tripData.sp,
+                selectedRoutes: tripData.r ?? [],
+                selectedHotels: tripData.h ?? [],
+                nights: tripData.n ?? 1,
+                derived: { grandTotal: tripData.t ?? 0 },
+                itineraryDetails: {
+                    tripTitle: tripData.d?.tripTitle ?? '',
+                    tripNotes: tripData.d?.tripNotes ?? '',
+                    dayPlans: tripData.d?.dayPlans ?? [],
+                },
+            };
+        }
+        return {
+            ...defaultState,
+            ...tripData,
+            itineraryDetails: {
+                ...defaultState.itineraryDetails,
+                ...(tripData.itineraryDetails ?? {}),
+                dayPlans: tripData.itineraryDetails?.dayPlans ?? [],
+            },
+        };
+    }, [tripData]);
+
+    const { searchParams, selectedRoutes, selectedHotels, nights, derived, itineraryDetails } = sharedState;
+
+    const normalizedDate = useMemo(() => {
+        if (!searchParams.date) return null;
+        const parsed = new Date(searchParams.date);
+        if (Number.isNaN(parsed.getTime())) return null;
+        return parsed;
+    }, [searchParams.date]);
+
+    const importSharedTrip = () => {
+        const safeSearch = {
+            from: searchParams?.from ?? '',
+            to: searchParams?.to ?? '',
+            date: searchParams?.date ?? '',
+            passengers: searchParams?.passengers ?? 1,
+            type: searchParams?.type ?? 'Both',
+        };
+
+        actions.setSearch(safeSearch);
+        actions.hydrate({
+            selectedRoutes: selectedRoutes ?? [],
+            selectedHotels: selectedHotels ?? [],
+            nights: nights ?? 1,
+            itineraryDetails: itineraryDetails ?? { tripTitle: '', tripNotes: '', dayPlans: [] },
+        });
+        toast.success('Shared itinerary loaded to your trip');
+        navigate('/itinerary');
+    };
 
     if (!tripData) {
         return (
@@ -28,20 +98,6 @@ export default function SharedTrip() {
             </div>
         );
     }
-
-    const { searchParams, selectedRoutes, selectedHotels, nights, derived } = useMemo(() => {
-        if (!tripData) return {};
-        if (tripData.sp) {
-            return {
-                searchParams: tripData.sp,
-                selectedRoutes: tripData.r ?? [],
-                selectedHotels: tripData.h ?? [],
-                nights: tripData.n ?? 1,
-                derived: { grandTotal: tripData.t ?? 0 }
-            };
-        }
-        return tripData;
-    }, [tripData]);
 
     return (
         <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-20 fade-in">
@@ -66,7 +122,7 @@ export default function SharedTrip() {
                             {searchParams.from} <span className="text-accent-orange text-2xl md:text-4xl px-2">➔</span> {searchParams.to}
                         </h1>
                         <div className="flex gap-4 mt-3 text-sm font-medium text-text-muted">
-                            <span>{new Date(searchParams.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                            <span>{normalizedDate ? normalizedDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : 'Date not specified'}</span>
                             <span>•</span>
                             <span>{searchParams.passengers} passenger{searchParams.passengers > 1 ? 's' : ''}</span>
                         </div>
@@ -141,11 +197,60 @@ export default function SharedTrip() {
                         })}
                     </div>
 
+                    {(itineraryDetails.tripNotes || itineraryDetails.dayPlans.length > 0) && (
+                        <div className="pt-6 border-t border-border-light space-y-5">
+                            <h3 className="text-lg font-black text-white tracking-wide">Detailed Plan</h3>
+
+                            {itineraryDetails.tripNotes && (
+                                <div className="bg-primary-bg/40 border border-border-light rounded-xl p-4">
+                                    <div className="text-[10px] uppercase tracking-widest font-black text-text-muted mb-2">Trip Notes</div>
+                                    <p className="text-sm text-white leading-relaxed">{itineraryDetails.tripNotes}</p>
+                                </div>
+                            )}
+
+                            {itineraryDetails.dayPlans.length > 0 && (
+                                <div className="space-y-3">
+                                    {itineraryDetails.dayPlans
+                                        .slice()
+                                        .sort((a, b) => a.day - b.day)
+                                        .map((plan) => (
+                                            <div key={plan.day} className="bg-primary-bg/30 border border-border-light rounded-xl p-4">
+                                                <div className="flex items-center justify-between gap-3 mb-2">
+                                                    <h4 className="font-extrabold text-white text-sm">Day {plan.day}: {plan.title || 'Plan'}</h4>
+                                                    {plan.estimatedBudget > 0 && (
+                                                        <span className="text-xs font-black text-accent-orange">₹{plan.estimatedBudget}</span>
+                                                    )}
+                                                </div>
+                                                {plan.dayNotes && (
+                                                    <p className="text-xs text-white/80 mb-2">{plan.dayNotes}</p>
+                                                )}
+                                                {plan.activities?.length > 0 ? (
+                                                    <ul className="text-sm text-text-muted space-y-1">
+                                                        {plan.activities.map((activity, index) => (
+                                                            <li key={`${plan.day}-${index}`}>• {activity}</li>
+                                                        ))}
+                                                    </ul>
+                                                ) : (
+                                                    <p className="text-xs text-text-muted italic">No activities listed for this day.</p>
+                                                )}
+                                            </div>
+                                        ))}
+                                </div>
+                            )}
+                        </div>
+                    )}
+
                 </div>
             </div>
 
             <div className="text-center mt-16 mb-10">
                 <h3 className="text-2xl font-black text-white mb-6 tracking-wide">Inspired to travel?</h3>
+                <button
+                    onClick={importSharedTrip}
+                    className="inline-flex items-center gap-3 bg-card-bg border border-border-light text-white font-black px-10 py-4 rounded-xl hover:border-accent-orange/50 hover:text-accent-orange transition-all mr-3"
+                >
+                    Use This Itinerary
+                </button>
                 <Link to="/" className="inline-flex items-center gap-3 bg-gradient-to-r from-accent-orange to-accent-orange-light text-primary-bg font-black px-10 py-4 rounded-xl hover-lift shadow-[0_4px_15px_rgba(249,115,22,0.3)] hover:shadow-[0_4px_25px_rgba(249,115,22,0.5)] transition-all">
                     Plan Your Own Trip <ExternalLink className="w-5 h-5" />
                 </Link>

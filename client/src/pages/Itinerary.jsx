@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import { useTrip } from '../context/TripContext';
 import ItineraryPanel from '../components/ItineraryPanel';
+import DetailedItineraryPlanner from '../components/DetailedItineraryPlanner';
 import ShareModal from '../components/ShareModal';
 import { Share2 } from 'lucide-react';
 
@@ -19,7 +20,10 @@ export default function Itinerary() {
     return (
         <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-20 fade-in flex flex-col lg:flex-row gap-8 lg:items-start">
 
-            <ItineraryPanel />
+            <div className="flex-1">
+                <ItineraryPanel />
+                <DetailedItineraryPlanner />
+            </div>
 
             <div className="lg:w-96 shrink-0 lg:sticky lg:top-24 mt-8 lg:mt-0">
                 <div className="glass-card p-6 border-border-light relative overflow-hidden">

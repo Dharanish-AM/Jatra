@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Send, Bot, KeyRound } from 'lucide-react';
+import { X, Send, Bot } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useTrip } from '../context/TripContext.jsx';
-import { useAIStore } from '../features/ai/store/aiStore.js';
 import { getTravelRecommendation } from '../services/aiService.js';
 import { fetchRoutes, fetchHotels } from '../services/travelApi.js';
 
@@ -17,9 +16,6 @@ export default function AIChatSidebar() {
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-
-  const apiKey = useAIStore((state) => state.apiKey);
-  const setApiKey = useAIStore((state) => state.setApiKey);
 
   const { searchParams, actions } = useTrip();
   const chatEndRef = useRef(null);
@@ -36,7 +32,7 @@ export default function AIChatSidebar() {
 
   const handleSendMessage = async (event) => {
     event.preventDefault();
-    if (!inputValue.trim() || !apiKey.trim()) return;
+    if (!inputValue.trim()) return;
 
     const userMsg = inputValue.trim();
     setMessages((prev) => [...prev, { role: 'user', content: userMsg }]);
@@ -50,7 +46,6 @@ export default function AIChatSidebar() {
       ]);
 
       const recommendation = await getTravelRecommendation({
-        apiKey,
         message: userMsg,
         searchParams,
         routes: relevantRoutes,
@@ -64,12 +59,12 @@ export default function AIChatSidebar() {
       setMessages((prev) => [...prev, { role: 'assistant', content: recommendation.answer }]);
     } catch (error) {
       console.error(error);
-      toast.error('Failed to connect to AI. Please check your API key.');
+      toast.error('Failed to connect to AI. Please try again.');
       setMessages((prev) => [
         ...prev,
         {
           role: 'assistant',
-          content: "I'm unable to connect right now. Please check your API key and try again.",
+          content: "I'm unable to connect right now. Please try again shortly.",
         },
       ]);
     } finally {
@@ -100,7 +95,7 @@ export default function AIChatSidebar() {
             </div>
             <div>
               <h2 className="font-extrabold text-white text-lg tracking-wide">Jatra AI</h2>
-              <p className="text-xs text-accent-orange font-medium">Llama 3 (Groq)</p>
+              <p className="text-xs text-accent-orange font-medium">Llama 3 via Groq</p>
             </div>
           </div>
           <button
@@ -113,43 +108,7 @@ export default function AIChatSidebar() {
           </button>
         </div>
 
-        {!apiKey.trim() ? (
-          <div className="p-6 flex-1 flex flex-col justify-center">
-            <div className="glass-card p-8 text-center">
-              <div className="bg-accent-orange/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-[inset_0_0_20px_rgba(249,115,22,0.2)]">
-                <KeyRound className="w-10 h-10 text-accent-orange" />
-              </div>
-              <h3 className="font-bold text-white text-xl mb-3">Groq API Key Required</h3>
-              <p className="text-sm text-text-muted mb-8 leading-relaxed">
-                Your key is saved only in this browser session.
-              </p>
-              <form
-                onSubmit={(event) => {
-                  event.preventDefault();
-                  if (!apiKey.trim()) return;
-                  toast.success('API key saved');
-                }}
-                className="flex flex-col gap-4"
-              >
-                <input
-                  type="password"
-                  aria-label="Groq API key"
-                  placeholder="gsk_..."
-                  value={apiKey}
-                  onChange={(event) => setApiKey(event.target.value.trim())}
-                  className="bg-primary-bg/50 border border-border-light text-white text-sm rounded-xl px-5 py-3.5 outline-none focus:border-accent-orange focus:ring-1 focus:ring-accent-orange shadow-inner"
-                />
-                <button
-                  type="submit"
-                  className="bg-gradient-to-r from-accent-orange to-accent-orange-light text-primary-bg font-bold py-3.5 rounded-xl hover:shadow-[0_0_20px_rgba(249,115,22,0.4)] transition-all"
-                >
-                  Save API Key
-                </button>
-              </form>
-            </div>
-          </div>
-        ) : (
-          <>
+        <>
             <div className="flex-1 overflow-y-auto p-5 space-y-6" role="log" aria-live="polite">
               {messages.map((message, index) => (
                 <div key={`${message.role}-${index}`} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in`}>
@@ -208,7 +167,6 @@ export default function AIChatSidebar() {
               </form>
             </div>
           </>
-        )}
       </aside>
     </>
   );

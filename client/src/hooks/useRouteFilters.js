@@ -28,6 +28,8 @@ export default function useRouteFilters(routes, searchParams, filters, sortBy) {
       }
 
       if (route.fare > filters.maxFare) return false;
+      if (route.rating < (filters.minRating ?? 0)) return false;
+      if (route.durationMinutes > (filters.maxDuration ?? 24 * 60)) return false;
       return true;
     });
 

@@ -10,7 +10,10 @@ cp .env.example .env
 npm install
 ```
 
-Update `.env` with your MongoDB URI.
+Update `.env` with your MongoDB URI and Groq key:
+
+- `MONGODB_URI=...`
+- `GROQ_API_KEY=...`
 
 ## 2) Run server
 
@@ -36,3 +39,30 @@ This command imports data from:
 - `GET /api/health`
 - `GET /api/routes?from=Delhi&to=Agra&type=train`
 - `GET /api/hotels?city=Agra`
+- `POST /api/ai/recommend`
+- `POST /api/ai/activities`
+
+### AI Request Examples
+
+`POST /api/ai/recommend`
+
+```json
+{
+	"message": "Suggest best route and budget",
+	"searchParams": { "from": "Delhi", "to": "Agra", "date": "2026-03-10", "passengers": 2 },
+	"routes": [],
+	"hotels": []
+}
+```
+
+`POST /api/ai/activities`
+
+```json
+{
+	"city": "Agra",
+	"day": 1,
+	"date": "2026-03-10",
+	"tripNotes": "Family-friendly pace",
+	"existingActivities": []
+}
+```

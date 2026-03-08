@@ -1,6 +1,6 @@
 import React from 'react';
 import SearchForm from '../components/SearchForm';
-import { MapPin, ArrowRight, Sparkles } from 'lucide-react';
+import { MapPin, ArrowRight, Sparkles, History, X, Trash2 } from 'lucide-react';
 import { useTrip } from '../context/TripContext';
 
 const TOMORROW_DATE = (() => {
@@ -19,7 +19,7 @@ const popularRoutes = [
 ];
 
 export default function Home() {
-    const { actions } = useTrip();
+    const { actions, recentSearches, searchParams } = useTrip();
 
     const handlePopularClick = (route) => {
         actions.setSearch({
@@ -59,7 +59,7 @@ export default function Home() {
 
                     <div className="premium-panel p-6 md:p-8 relative z-20 animate-slide-up transform-gpu mx-auto w-full max-w-4xl shadow-[0_20px_50px_rgba(15,23,42,0.12)]">
                         <div className="absolute -inset-1 bg-gradient-to-r from-accent-orange/25 to-accent-teal/20 rounded-[var(--radius-card)] blur opacity-45 z-[-1]"></div>
-                        <SearchForm />
+                        <SearchForm key={`${searchParams.from}-${searchParams.to}-${searchParams.date}-${searchParams.passengers}-${searchParams.type}`} />
                     </div>
 
                     <div className="mt-20 text-center animate-fade-in" style={{ animationDelay: '0.4s' }}>
@@ -79,6 +79,48 @@ export default function Home() {
                             ))}
                         </div>
                     </div>
+
+                    {recentSearches.length > 0 && (
+                        <div className="mt-10 max-w-4xl mx-auto w-full animate-fade-in" style={{ animationDelay: '0.5s' }}>
+                            <div className="flex items-center justify-between mb-4">
+                                <div className="flex items-center gap-2 text-text-muted">
+                                    <History className="w-4 h-4 text-accent-teal" />
+                                    <span className="text-xs font-black uppercase tracking-[0.15em]">Recent Searches</span>
+                                </div>
+                                <button
+                                    onClick={actions.clearRecentSearches}
+                                    className="text-xs font-bold text-text-muted hover:text-text-primary border border-border-light rounded-lg px-3 py-1.5 inline-flex items-center gap-1.5 transition-colors"
+                                >
+                                    <Trash2 className="w-3.5 h-3.5" /> Clear
+                                </button>
+                            </div>
+
+                            <div className="space-y-2">
+                                {recentSearches.map((item) => (
+                                    <div key={item.savedAt} className="flex items-center gap-2 bg-card-bg/60 border border-border-light rounded-xl px-4 py-3">
+                                        <button
+                                            onClick={() => actions.setSearch(item)}
+                                            className="flex-1 text-left"
+                                        >
+                                            <div className="text-sm font-bold text-text-primary">
+                                                {item.from} <span className="text-text-muted">to</span> {item.to}
+                                            </div>
+                                            <div className="text-xs text-text-muted mt-0.5">
+                                                {item.date} • {item.passengers} passenger{item.passengers > 1 ? 's' : ''} • {item.type}
+                                            </div>
+                                        </button>
+                                        <button
+                                            onClick={() => actions.removeRecentSearch(item.savedAt)}
+                                            aria-label={`Remove recent search ${item.from} to ${item.to}`}
+                                            className="p-2 rounded-lg text-text-muted hover:text-text-primary hover:bg-primary-bg/50 transition-colors"
+                                        >
+                                            <X className="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
 

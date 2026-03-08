@@ -23,6 +23,8 @@ export default function Results() {
         operators: ['Government', 'Private'],
         times: [],
         maxFare: 5000,
+        minRating: 0,
+        maxDuration: 24 * 60,
     });
 
     const [sortBy, setSortBy] = useState('Cheapest');
@@ -206,7 +208,16 @@ export default function Results() {
                             <h3 className="text-2xl font-black text-text-primary mb-2 tracking-wide">No routes found</h3>
                             <p className="text-text-muted mb-8 font-medium">Try adjusting your transport type or price range.</p>
                             <button
-                                onClick={() => setFilters({ types: ['Bus', 'Train'], operators: ['Government', 'Private'], times: [], maxFare: 5000 })}
+                                onClick={() =>
+                                    setFilters({
+                                        types: ['Bus', 'Train'],
+                                        operators: ['Government', 'Private'],
+                                        times: [],
+                                        maxFare: 5000,
+                                        minRating: 0,
+                                        maxDuration: 24 * 60,
+                                    })
+                                }
                                 className="bg-primary-bg/50 border border-border-light font-bold text-text-primary px-8 py-3 rounded-xl hover:bg-card-bg transition-colors shadow-sm"
                             >
                                 Reset Filters
