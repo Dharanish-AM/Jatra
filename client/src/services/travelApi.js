@@ -9,7 +9,10 @@ async function request(path, query = {}) {
     }
   });
 
-  const response = await fetch(url.toString());
+  const token = localStorage.getItem('jatra_token');
+  const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+  const response = await fetch(url.toString(), { headers });
   if (!response.ok) {
     throw new Error(`Request failed: ${response.status}`);
   }

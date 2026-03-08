@@ -1,5 +1,10 @@
 import { TripProvider } from '../../context/TripContext';
+import { AuthProvider } from '../../context/AuthContext';
 
 export default function AppProviders({ children }) {
-  return <TripProvider>{children}</TripProvider>;
+  return (
+    <AuthProvider>
+      <TripProvider>{children}</TripProvider>
+    </AuthProvider>
+  );
 }
