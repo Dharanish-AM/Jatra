@@ -1,10 +1,10 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '/api';
 
-async function authRequest(path, options = {}) {
+async function authRequest(path, { headers: extraHeaders, ...rest } = {}) {
   const url = `${API_BASE_URL}/auth${path}`;
   const response = await fetch(url, {
-    headers: { 'Content-Type': 'application/json', ...options.headers },
-    ...options,
+    headers: { 'Content-Type': 'application/json', ...extraHeaders },
+    ...rest,
   });
   const data = await response.json();
   if (!response.ok) {

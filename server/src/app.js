@@ -7,7 +7,9 @@ import hotelRoutes from "./routes/hotelRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler.js";
 
-const clientOrigin = process.env.CLIENT_ORIGIN ?? "http://localhost:5173";
+const clientOrigin = (
+  process.env.CLIENT_ORIGIN ?? "http://localhost:5173"
+).replace(/\/$/, "");
 
 export const app = express();
 
