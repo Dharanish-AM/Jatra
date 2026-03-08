@@ -1,6 +1,9 @@
 import React, { Suspense } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
+import ProtectedRoute from "../../components/ProtectedRoute";
 
+const Signup = React.lazy(() => import('../../pages/Signup'));
+const   Login = React.lazy(() => import('../../pages/Login'));
 const Home = React.lazy(() => import('../../pages/Home'));
 const Results = React.lazy(() => import('../../pages/Results'));
 const Hotels = React.lazy(() => import('../../pages/Hotels'));
@@ -33,10 +36,16 @@ export default function AppRouter() {
       }
     >
       <Routes>
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/" element={<Home />} />
         <Route path="/results" element={<Results />} />
         <Route path="/hotels" element={<Hotels />} />
-        <Route path="/itinerary" element={<Itinerary />} />
+        <Route path="/itinerary" element={
+            <ProtectedRoute>
+              <Itinerary />
+            </ProtectedRoute>
+        } />
         <Route path="/trip" element={<SharedTrip />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

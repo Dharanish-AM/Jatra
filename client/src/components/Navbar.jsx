@@ -7,6 +7,12 @@ export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const { selectedRoutes, selectedHotels } = useTrip();
+    const isLoggedIn = localStorage.getItem("username");
+
+    const handleLogout = () => {
+        localStorage.removeItem("username");
+        window.location.reload();
+    };
 
     useEffect(() => {
         const handleScroll = () => {
@@ -65,12 +71,37 @@ export default function Navbar() {
                         }
                     >
                         My Trip
-                        {itemCount > 0 && (
+                        {isLoggedIn && itemCount > 0 && (
                             <span className="absolute -top-2.5 -right-2.5 bg-accent-orange text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full animate-bounce shadow-[0_0_10px_rgba(249,115,22,0.6)] border-2 border-primary-bg">
                                 {itemCount}
                             </span>
                         )}
                     </NavLink>
+                    {/* Login Button */}
+                    {!isLoggedIn ? (
+                    <>
+                        <Link
+                            to="/login"
+                            className="px-4 py-2 rounded-lg font-semibold text-sm border border-border-light text-text-primary hover:border-accent-orange hover:text-accent-orange transition-all duration-300"
+                        >
+                            Login
+                        </Link>
+
+                        <Link
+                            to="/signup"
+                            className="px-4 py-2 rounded-lg font-semibold text-sm bg-gradient-to-r from-accent-orange to-accent-orange-light text-white shadow hover:opacity-90 transition-all duration-300"
+                        >
+                            Signup
+                        </Link>
+                    </>
+                ) : (
+                    <button
+                        onClick={handleLogout}
+                        className="px-4 py-2 rounded-lg font-semibold text-sm bg-red-500 text-white hover:bg-red-600 transition-all duration-300"
+                    >
+                        Logout
+                    </button>
+                )}
                 </div>
 
                 <div className="md:hidden flex items-center">
@@ -114,6 +145,31 @@ export default function Navbar() {
                             </span>
                         )}
                     </NavLink>
+                    {/* Login Button */}
+                    {!isLoggedIn ? (
+                    <>
+                        <Link
+                            to="/login"
+                            className="px-4 py-2 rounded-lg font-semibold text-sm border border-border-light text-text-primary hover:border-accent-orange hover:text-accent-orange transition-all duration-300"
+                        >
+                            Login
+                        </Link>
+
+                        <Link
+                            to="/signup"
+                            className="px-4 py-2 rounded-lg font-semibold text-sm bg-gradient-to-r from-accent-orange to-accent-orange-light text-white shadow hover:opacity-90 transition-all duration-300"
+                        >
+                            Signup
+                        </Link>
+                    </>
+                ) : (
+                    <button
+                        onClick={handleLogout}
+                        className="px-4 py-2 rounded-lg font-semibold text-sm bg-red-500 text-white hover:bg-red-600 transition-all duration-300"
+                    >
+                        Logout
+                    </button>
+                )}
                 </div>
             </div>
         </nav>
